@@ -141,6 +141,33 @@ header .lede{color:#B9CAD8;max-width:64ch;font-size:15.5px}
 
 .no-settings-msg{padding:20px;text-align:center;color:var(--grey);font-size:13px;border:1px dashed var(--line);border-radius:8px}
 
+/* methodology section */
+.method-section{margin-top:28px;margin-bottom:28px}
+.method-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:28px;box-shadow:var(--shadow)}
+.method-card h2{font-size:19px;margin-bottom:6px;color:var(--navy)}
+.method-card .method-sub{font-size:13px;color:var(--grey);margin-bottom:20px}
+.formula-box{background:var(--navy);color:#fff;border-radius:10px;padding:20px 24px;margin-bottom:20px;font-family:'SF Mono',Consolas,'Courier New',monospace;font-size:14px;line-height:1.8;text-align:center}
+.formula-box .formula-main{font-size:16px;font-weight:700;letter-spacing:.02em;color:#fff;margin-bottom:6px}
+.formula-box .formula-note{font-size:11.5px;color:#8FA6B8;font-family:'Inter',sans-serif;font-weight:400}
+.factor-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(max-width:760px){.factor-grid{grid-template-columns:1fr}}
+.factor{border:1px solid var(--line);border-radius:10px;padding:16px;background:#fff}
+.factor .f-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
+.factor h4{font-size:14px;color:var(--navy);margin-bottom:6px}
+.factor p{font-size:12.5px;color:var(--slate);margin:0;line-height:1.5}
+.factor .f-table{margin-top:8px;font-size:12px;width:100%;border-collapse:collapse}
+.factor .f-table td{padding:4px 8px 4px 0;color:var(--slate);border-bottom:1px solid var(--off)}
+.factor .f-table td:last-child{text-align:right;font-weight:600;color:var(--navy)}
+.factor .f-table tr:last-child td{border-bottom:none}
+
+/* applied factors in summary */
+.applied-factors{margin-top:10px;padding:12px 14px;background:var(--off);border-radius:8px;border:1px solid var(--line)}
+.applied-factors .af-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:8px}
+.af-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:12px}
+.af-row .af-label{color:var(--grey)}
+.af-row .af-val{font-weight:600;color:var(--navy)}
+.af-formula{margin-top:8px;padding:8px 10px;background:#fff;border:1px dashed var(--line);border-radius:6px;font-size:11.5px;color:var(--slate);font-family:'SF Mono',Consolas,monospace;line-height:1.6}
+
 footer{margin-top:30px;padding:18px 0;border-top:1px solid var(--line);font-size:11.5px;color:var(--grey)}
 footer .wrap{max-width:1280px}
 footer p{margin-bottom:5px}
@@ -320,6 +347,8 @@ footer b{color:var(--navy)}
       </div>
     </div>
 
+    <div id="appliedFactors"></div>
+
     <div class="flags" id="flags"></div>
 
     <div class="actions hideprint">
@@ -331,6 +360,80 @@ footer b{color:var(--navy)}
 </div>
 
 </div>
+
+<!-- HOW YOUR QUOTE IS CALCULATED -->
+<div class="method-section">
+<div class="method-card">
+  <h2>How your quote is calculated</h2>
+  <p class="method-sub">Every line item follows the same transparent formula. No hidden fees, no opaque bundles.</p>
+
+  <div class="formula-box">
+    <div class="formula-main">Annual subscription = Base price &times; Units &times; Deployment &times; Region &times; Pricing tier &times; Contract term</div>
+    <div class="formula-note">Year 1 total = Annual subscription + One-time deployment fee + Infrastructure platform + Professional services</div>
+  </div>
+
+  <div class="factor-grid">
+    <div class="factor">
+      <div class="f-label">Factor 1</div>
+      <h4>Base price per unit</h4>
+      <p>Each clinical setting has a per-unit rate (per bed, per site, per patient, or per resident) that varies by module tier. The mid-range rate is used for all quotes.</p>
+    </div>
+    <div class="factor">
+      <div class="f-label">Factor 2</div>
+      <h4>Deployment model multiplier</h4>
+      <p>On-premise and hybrid deployments require dedicated infrastructure, reflected as a multiplier on the subscription.</p>
+      <table class="f-table">
+        <tr><td>Private regional cloud</td><td>&times;1.00 (base)</td></tr>
+        <tr><td>Hybrid</td><td>&times;1.20</td></tr>
+        <tr><td>On-premise / air-gapped</td><td>&times;1.45</td></tr>
+      </table>
+    </div>
+    <div class="factor">
+      <div class="f-label">Factor 3</div>
+      <h4>Regional adjustment</h4>
+      <p>Prices are adjusted to reflect local market conditions and procurement currency.</p>
+      <table class="f-table">
+        <tr><td>United States (USD)</td><td>&times;1.00</td></tr>
+        <tr><td>UK / NHS (GBP)</td><td>&times;0.72</td></tr>
+        <tr><td>Western Europe (EUR)</td><td>&times;0.90</td></tr>
+        <tr><td>GCC (USD)</td><td>&times;1.00</td></tr>
+        <tr><td>Other / emerging (USD)</td><td>&times;0.40</td></tr>
+      </table>
+    </div>
+    <div class="factor">
+      <div class="f-label">Factor 4</div>
+      <h4>Pricing tier</h4>
+      <p>Early adopters who commit to case-study and reference rights receive preferential rates.</p>
+      <table class="f-table">
+        <tr><td>Early adopter</td><td>&times;0.50 (50% discount)</td></tr>
+        <tr><td>Standard</td><td>&times;0.70 (30% discount)</td></tr>
+        <tr><td>Premium</td><td>&times;1.00 (list price)</td></tr>
+      </table>
+    </div>
+    <div class="factor">
+      <div class="f-label">Factor 5</div>
+      <h4>Contract term discount</h4>
+      <p>Longer commitments reduce the effective annual rate.</p>
+      <table class="f-table">
+        <tr><td>1 year</td><td>&times;1.00 (no discount)</td></tr>
+        <tr><td>3 years</td><td>&times;0.88 (12% discount)</td></tr>
+        <tr><td>5 years</td><td>&times;0.80 (20% discount)</td></tr>
+      </table>
+    </div>
+    <div class="factor">
+      <div class="f-label">One-time fees</div>
+      <h4>Deployment &amp; infrastructure</h4>
+      <p>A one-time deployment fee covers integration, setup and go-live. Hybrid and on-prem deployments include an annual infrastructure platform fee for dedicated compute.</p>
+      <table class="f-table">
+        <tr><td>Cloud deployment fee</td><td>$25,000</td></tr>
+        <tr><td>Hybrid deployment fee</td><td>$65,000</td></tr>
+        <tr><td>On-prem deployment fee</td><td>$162,500</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+
 </div>
 
 <footer>
@@ -701,6 +804,35 @@ function renderSummary(){
   if(STATE.deploy === 'onprem'){
     F.insertAdjacentHTML('beforeend', `<div class="flag info">${fIco.info}<span>On-premise deployment requires GPU / inference infrastructure at your site. Our team will assess readiness during the technical briefing.</span></div>`);
   }
+
+  // Applied factors breakdown
+  const AF = document.getElementById('appliedFactors');
+  AF.innerHTML = '';
+  const deployLabel = DEPLOY[STATE.deploy].label;
+  const regionLabel = document.getElementById('region').selectedOptions[0]?.text || STATE.region;
+  const phaseLabel = PHASE_LABEL[STATE.phase] || STATE.phase;
+  const termYears = STATE.term;
+
+  let afHtml = `<div class="applied-factors">
+    <div class="af-title">Applied pricing factors</div>
+    <div class="af-row"><span class="af-label">Deployment model</span><span class="af-val">${deployLabel} &times;${c.deployMult.toFixed(2)}</span></div>
+    <div class="af-row"><span class="af-label">Regional adjustment</span><span class="af-val">${regionLabel} &times;${c.rMult.toFixed(2)}</span></div>
+    <div class="af-row"><span class="af-label">Pricing tier</span><span class="af-val">${phaseLabel} &times;${c.phaseM.toFixed(2)}${c.phaseM < 1 ? ' (' + Math.round((1-c.phaseM)*100) + '% discount)' : ''}</span></div>
+    <div class="af-row"><span class="af-label">Contract term</span><span class="af-val">${termYears} year${termYears>1?'s':''} &times;${c.termM.toFixed(2)}${c.termM < 1 ? ' (' + Math.round((1-c.termM)*100) + '% discount)' : ''}</span></div>`;
+
+  // Per-setting formula breakdown
+  if(c.settingLines.length > 0){
+    afHtml += `<div class="af-formula">`;
+    c.settingLines.forEach(sl => {
+      const basePerUnit = sl.unitPriceLocal / c.rMult;
+      afHtml += `<div style="margin-bottom:4px"><strong>${sl.label}:</strong><br>`;
+      afHtml += `${s}${basePerUnit.toLocaleString('en-US',{maximumFractionDigits:2})}/${sl.unitLabel} &times; ${sl.size.toLocaleString()} &times; ${c.deployMult.toFixed(2)} &times; ${c.rMult.toFixed(2)} &times; ${c.phaseM.toFixed(2)} &times; ${c.termM.toFixed(2)} = ${fmt(sl.lineSub, s)}/yr</div>`;
+    });
+    afHtml += `</div>`;
+  }
+
+  afHtml += `</div>`;
+  AF.innerHTML = afHtml;
 }
 
 function update(){
@@ -805,6 +937,19 @@ function printQuote(){
       <dt>Pricing tier</dt><dd>${PHASE_LABEL[STATE.phase] || STATE.phase}</dd>
       ${settingsHtml}
     </dl>
+    <div style="margin-top:16px;padding:12px 14px;background:#f8f9fa;border-radius:8px;border:1px solid #ddd">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:8px">Calculation methodology</div>
+      <div style="font-size:11.5px;color:var(--slate);margin-bottom:8px;font-family:monospace;background:#fff;padding:8px 10px;border-radius:6px;border:1px dashed #ddd">
+        Annual subscription = Base price &times; Units &times; Deployment (&times;${c.deployMult.toFixed(2)}) &times; Region (&times;${c.rMult.toFixed(2)}) &times; Pricing tier (&times;${c.phaseM.toFixed(2)}) &times; Term (&times;${c.termM.toFixed(2)})
+      </div>
+      <div style="font-size:11px;color:var(--slate);line-height:1.6">
+        ${c.settingLines.map(sl => {
+          const basePerUnit = sl.unitPriceLocal / c.rMult;
+          return `<div><strong>${sl.label}:</strong> $${basePerUnit.toLocaleString('en-US',{maximumFractionDigits:2})}/${sl.unitLabel} &times; ${sl.size.toLocaleString()} &times; ${c.deployMult.toFixed(2)} &times; ${c.rMult.toFixed(2)} &times; ${c.phaseM.toFixed(2)} &times; ${c.termM.toFixed(2)} = ${fmt(sl.lineSub, c.sym)}/yr</div>`;
+        }).join('')}
+        <div style="margin-top:6px;font-size:10.5px;color:var(--grey)">Year 1 = Annual subscription + One-time deployment fee (${fmt(c.deployFee, c.sym)})${c.applianceFee > 0 ? ' + Infrastructure platform (' + fmt(c.applianceFee, c.sym) + ')' : ''}${c.addonsTotal > 0 ? ' + Professional services (' + fmt(c.addonsTotal, c.sym) + ')' : ''}</div>
+      </div>
+    </div>
     <div class="ph-validity">This quote is valid for 30 days &mdash; until ${fmtDate(validity)}.</div>
   `;
   window.print();
@@ -848,6 +993,16 @@ function copyBreakdown(){
   txt += `3-year TCO:          ${fmt(c.tco3, c.sym)} ${c.cur}\n`;
   txt += `5-year TCO:          ${fmt(c.tco5, c.sym)} ${c.cur}\n`;
   txt += `========================================\n\n`;
+  txt += `--- Calculation Methodology ---\n`;
+  txt += `Formula: Annual subscription = Base price x Units x Deployment (x${c.deployMult.toFixed(2)}) x Region (x${c.rMult.toFixed(2)}) x Pricing tier (x${c.phaseM.toFixed(2)}) x Term (x${c.termM.toFixed(2)})\n\n`;
+  c.settingLines.forEach(sl => {
+    const basePerUnit = sl.unitPriceLocal / c.rMult;
+    txt += `${sl.label}: $${basePerUnit.toLocaleString('en-US',{maximumFractionDigits:2})}/${sl.unitLabel} x ${sl.size.toLocaleString()} x ${c.deployMult.toFixed(2)} x ${c.rMult.toFixed(2)} x ${c.phaseM.toFixed(2)} x ${c.termM.toFixed(2)} = ${fmt(sl.lineSub, c.sym)}/yr\n`;
+  });
+  txt += `\nYear 1 = Annual subscription + Deployment fee (${fmt(c.deployFee, c.sym)})`;
+  if(c.applianceFee > 0) txt += ` + Infrastructure (${fmt(c.applianceFee, c.sym)})`;
+  if(c.addonsTotal > 0) txt += ` + Services (${fmt(c.addonsTotal, c.sym)})`;
+  txt += `\n========================================\n\n`;
   txt += `This quote is valid for 30 days from ${fmtDate(today)}.\n`;
   txt += `Final pricing subject to scope validation and contractual agreement.\n`;
 
