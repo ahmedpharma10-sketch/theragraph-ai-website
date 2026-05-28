@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TheraGraph AI — Protocol-Locked Clinical Intelligence</title>
+<meta name="description" content="The clinical AI that only knows what your institution knows. Patient-contextual drug interaction reasoning, locked to your protocols, running entirely inside your perimeter.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TheraGraph AI — design system (per Design_WEB_directions)
+   60% white/light · 30% navy/slate structure · 10% teal pop
+   ============================================================ */
+:root{
+  --navy:#0B1F33;
+  --navy-2:#0E2A45;
+  --teal:#0E7C86;
+  --cyan:#13A3AE;
+  --slate:#33475B;
+  --grey:#6B7A8D;
+  --line:#C9D6DE;
+  --pale-teal:#EAF3F4;
+  --off-white:#F2F6F8;
+  --white:#FFFFFF;
+  --maxw:1240px;
+  --r:8px;
+  --shadow-sm:0 1px 2px rgba(11,31,51,.06),0 2px 8px rgba(11,31,51,.05);
+  --shadow-md:0 8px 30px rgba(11,31,51,.08),0 2px 8px rgba(11,31,51,.05);
+  --shadow-lg:0 24px 60px rgba(11,31,51,.14),0 8px 24px rgba(11,31,51,.08);
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--slate);background:var(--white);line-height:1.55;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  font-size:16.5px;overflow-x:hidden;
+}
+h1,h2,h3,h4{color:var(--navy);line-height:1.12;margin:0;letter-spacing:-.02em;font-weight:700}
+h1{font-size:clamp(2.1rem,4.6vw,3.5rem);font-weight:800}
+h2{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:700;letter-spacing:-.025em}
+h3{font-size:1.22rem;font-weight:600;letter-spacing:-.01em}
+p{margin:0 0 1rem;max-width:72ch}
+a{color:var(--teal);text-decoration:none;transition:color .2s}
+a:hover{color:var(--cyan)}
+img{max-width:100%}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px}
+.eyebrow{font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin:0 0 14px}
+.lede{font-size:clamp(1.05rem,1.6vw,1.32rem);color:var(--slate);max-width:60ch;font-weight:400}
+.muted{color:var(--grey)}
+.caption{font-size:.85rem;color:var(--grey)}
+.center{text-align:center}
+.center .lede,.center p{margin-left:auto;margin-right:auto}
+section{position:relative}
+.section-pad{padding:clamp(64px,9vw,120px) 0}
+.band-off{background:var(--off-white)}
+.band-navy{background:var(--navy);color:#C6D4E0}
+.band-navy h1,.band-navy h2,.band-navy h3{color:#fff}
+.band-navy .eyebrow{color:var(--cyan)}
+.band-pale{background:var(--pale-teal)}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:9px;font:inherit;font-weight:600;font-size:.97rem;
+  padding:13px 24px;border-radius:var(--r);cursor:pointer;border:2px solid transparent;
+  transition:all .2s var(--ease);white-space:nowrap;line-height:1}
+.btn-primary{background:var(--teal);color:#fff}
+.btn-primary:hover{background:var(--cyan);color:#fff;transform:translateY(-1px);box-shadow:0 8px 20px rgba(14,124,134,.3)}
+.btn-secondary{background:transparent;border-color:var(--teal);color:var(--teal)}
+.btn-secondary:hover{background:rgba(14,124,134,.07);color:var(--teal)}
+.btn-ghost{background:transparent;color:var(--teal);padding:13px 4px}
+.btn-ghost:hover{gap:13px}
+.band-navy .btn-secondary{border-color:rgba(255,255,255,.5);color:#fff}
+.band-navy .btn-secondary:hover{background:rgba(255,255,255,.1)}
+.btn svg{width:17px;height:17px;transition:transform .2s var(--ease)}
+.btn-ghost:hover svg,.btn-primary:hover svg{transform:translateX(3px)}
+
+/* ---------- nav ---------- */
+header.nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.82);
+  backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid transparent;transition:all .25s}
+header.nav.scrolled{border-bottom-color:var(--line);box-shadow:var(--shadow-sm)}
+.nav-inner{max-width:var(--maxw);margin:0 auto;padding:14px 32px;display:flex;align-items:center;gap:36px}
+.brand{display:flex;align-items:center;gap:11px;cursor:pointer}
+.brand svg{width:32px;height:32px;flex:none}
+.brand .wm{font-weight:800;font-size:1.18rem;letter-spacing:-.03em;display:flex;align-items:baseline;line-height:1}
+.wm .t1{color:var(--navy)}.wm .t2{color:var(--teal)}
+.wm .t3{font-size:.62em;color:var(--grey);font-weight:700;transform:translateY(-.55em);margin-left:1px}
+.nav-links{display:flex;align-items:center;gap:4px;margin-left:auto}
+.nav-item{position:relative}
+.nav-item>a{display:flex;align-items:center;gap:5px;padding:10px 15px;color:var(--slate);font-weight:500;font-size:.95rem;border-radius:6px;cursor:pointer}
+.nav-item>a:hover{color:var(--navy);background:var(--off-white)}
+.nav-item>a svg{width:13px;height:13px;opacity:.6;transition:transform .2s}
+.nav-item:hover>a svg{transform:rotate(180deg)}
+.dropdown{position:absolute;top:calc(100% + 8px);left:0;min-width:280px;background:#fff;border:1px solid var(--line);
+  border-radius:12px;box-shadow:var(--shadow-lg);padding:8px;opacity:0;visibility:hidden;transform:translateY(8px);
+  transition:all .2s var(--ease)}
+.nav-item:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+.dropdown a{display:block;padding:11px 14px;border-radius:8px;color:var(--slate);font-size:.92rem;font-weight:500}
+.dropdown a:hover{background:var(--off-white);color:var(--navy)}
+.dropdown a span{display:block;font-size:.79rem;color:var(--grey);font-weight:400;margin-top:2px}
+.nav-cta{margin-left:8px}
+.burger{display:none;background:none;border:none;cursor:pointer;padding:8px;color:var(--navy)}
+.burger svg{width:26px;height:26px}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;background:var(--white);padding-top:clamp(40px,6vw,72px)}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;min-height:min(78vh,720px)}
+.hero h1{margin-bottom:22px}
+.hero .lede{margin-bottom:32px}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.hero-micro{font-size:.88rem;color:var(--grey);display:flex;align-items:center;gap:8px}
+.hero-micro svg{width:15px;height:15px;color:var(--teal)}
+.hero-visual{position:relative;height:100%;min-height:440px}
+.bg-mesh{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.55}
+.bg-mesh::before{content:"";position:absolute;width:760px;height:760px;right:-200px;top:-260px;border-radius:50%;
+  background:radial-gradient(circle,rgba(19,163,174,.13),transparent 62%)}
+.bg-mesh::after{content:"";position:absolute;width:560px;height:560px;left:-180px;bottom:-220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(11,31,51,.07),transparent 60%)}
+
+/* ---------- closed-system diagram ---------- */
+.vault-diagram{width:100%;height:auto;display:block;filter:drop-shadow(0 24px 50px rgba(11,31,51,.13))}
+.vd-flow{stroke-dasharray:5 5;animation:dash 1.6s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-20}}
+.vd-pulse{transform-box:fill-box;transform-origin:center;animation:pulse 3s var(--ease) infinite}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+.vd-blocked{animation:blink 2.4s steps(1) infinite}
+@keyframes blink{0%,70%{opacity:1}71%,100%{opacity:.25}}
+
+/* ---------- generic blocks ---------- */
+.grid{display:grid;gap:28px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:30px;transition:all .25s var(--ease)}
+.card:hover{box-shadow:var(--shadow-md);transform:translateY(-3px);border-color:#b3c5d0}
+.card .ico{width:46px;height:46px;border-radius:11px;background:var(--pale-teal);display:grid;place-items:center;margin-bottom:18px}
+.card .ico svg{width:23px;height:23px;color:var(--teal)}
+.card h3{margin-bottom:9px}
+.card p{font-size:.96rem;margin-bottom:0;color:var(--slate)}
+.card.feature{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal)}
+.card.feature .tag{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--teal);background:var(--pale-teal);padding:4px 10px;border-radius:20px;margin-bottom:14px}
+
+/* callout — signature left bar */
+.callout{background:var(--pale-teal);border-left:4px solid var(--teal);padding:24px 28px;border-radius:0 var(--r) var(--r) 0}
+.callout h3{margin-bottom:8px}
+.callout p:last-child{margin-bottom:0}
+
+/* contrast comparison */
+.compare{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.compare .col{padding:30px 26px;border-right:1px solid var(--line)}
+.compare .col:last-child{border-right:none;background:var(--pale-teal)}
+.compare .col h4{font-size:1.02rem;margin-bottom:14px}
+.compare .col.win h4{color:var(--teal)}
+.compare .col p{font-size:.92rem;color:var(--slate);margin:0}
+.compare .badge{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--grey);display:block;margin-bottom:6px}
+.compare .col.win .badge{color:var(--teal)}
+
+/* steps */
+.steps{counter-reset:s;display:grid;gap:18px}
+.step{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start;background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px 26px}
+.step .num{counter-increment:s;width:38px;height:38px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.95rem}
+.step .num::before{content:counter(s)}
+.step h3{margin-bottom:5px;font-size:1.05rem}
+.step p{font-size:.94rem;margin:0}
+
+/* data table */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px}
+table.data{width:100%;border-collapse:collapse;min-width:560px}
+table.data th{background:var(--navy);color:#fff;padding:15px 18px;text-align:left;font-size:.9rem;font-weight:600}
+table.data td{padding:15px 18px;border-bottom:1px solid var(--line);font-size:.93rem;color:var(--slate);vertical-align:top}
+table.data tr:nth-child(even) td{background:var(--off-white)}
+table.data tr:last-child td{border-bottom:none}
+table.data .lead{font-weight:600;color:var(--navy)}
+
+/* stat row */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.stat{padding:8px 0}
+.stat .big{font-size:clamp(2.2rem,4vw,3.2rem);font-weight:800;color:var(--navy);letter-spacing:-.03em;line-height:1}
+.band-navy .stat .big{color:#fff}
+.stat .big em{color:var(--teal);font-style:normal}
+.band-navy .stat .big em{color:var(--cyan)}
+.stat .lbl{margin-top:8px;font-size:.92rem;color:var(--grey)}
+.band-navy .stat .lbl{color:#9FB3C4}
+
+/* perimeter-wrapped block (vault motif) */
+.vault-box{border:1px solid var(--line);border-radius:14px;padding:32px;position:relative;background:#fff}
+.vault-box::before{content:"";position:absolute;inset:9px;border:1px dashed var(--line);border-radius:9px;pointer-events:none}
+.vault-box .inner{position:relative}
+
+/* commitments list */
+.commit{display:grid;gap:14px}
+.commit li{list-style:none;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;
+  padding:18px 22px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px}
+.commit li .ck{width:26px;height:26px;border-radius:50%;background:rgba(19,163,174,.18);display:grid;place-items:center;flex:none;margin-top:1px}
+.commit li .ck svg{width:15px;height:15px;color:var(--cyan)}
+.commit li b{color:#fff;font-weight:600}
+.commit li span{color:#A9BECE;font-size:.95rem}
+
+/* persona / module grid items reuse .card */
+/* CTA band */
+.cta-band{background:var(--navy);color:#fff;border-radius:20px;padding:clamp(40px,6vw,68px);text-align:center;position:relative;overflow:hidden}
+.cta-band::before{content:"";position:absolute;width:560px;height:560px;left:50%;top:-60%;transform:translateX(-50%);
+  background:radial-gradient(circle,rgba(19,163,174,.22),transparent 60%)}
+.cta-band>*{position:relative}
+.cta-band h2{color:#fff;margin-bottom:14px}
+.cta-band p{color:#B9CAD8;margin:0 auto 28px;max-width:52ch}
+.cta-band .hero-cta{justify-content:center}
+
+/* footer */
+footer.ft{background:#08182A;color:#90A4B6;padding:64px 0 30px}
+.ft-top{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:34px;padding-bottom:44px;border-bottom:1px solid rgba(255,255,255,.09)}
+.ft .brand .wm .t1{color:#fff}.ft .brand .wm .t3{color:#7d93a6}
+.ft-tag{margin:16px 0 0;font-size:.92rem;color:#7d93a6;max-width:30ch}
+.ft h4{color:#fff;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px;font-weight:600}
+.ft ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.ft ul a{color:#90A4B6;font-size:.92rem}
+.ft ul a:hover{color:#fff}
+.ft-bot{padding-top:26px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:.84rem;color:#647c90}
+.ft-disclaim{max-width:62ch}
+
+/* reveal on scroll */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}.reveal.d3{transition-delay:.24s}.reveal.d4{transition-delay:.32s}
+
+/* page intro */
+.page-head{padding:clamp(48px,7vw,88px) 0 0}
+.page-head .eyebrow{margin-bottom:16px}
+.breadcrumb{font-size:.84rem;color:var(--grey);margin-bottom:18px}
+.breadcrumb a{color:var(--grey)}.breadcrumb a:hover{color:var(--teal)}
+
+/* legal prose */
+.prose h2{font-size:1.4rem;margin:34px 0 12px}
+.prose h3{margin:24px 0 8px}
+.prose p,.prose li{font-size:1rem;color:var(--slate)}
+.prose ul{padding-left:20px}
+.note-inline{background:var(--off-white);border:1px solid var(--line);border-radius:10px;padding:16px 20px;font-size:.92rem;color:var(--grey);margin:20px 0}
+
+/* form */
+.form{display:grid;gap:16px;max-width:520px}
+.field label{display:block;font-size:.86rem;font-weight:600;color:var(--navy);margin-bottom:6px}
+.field input,.field textarea,.field select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:8px;
+  font:inherit;font-size:.95rem;color:var(--slate);background:#fff;transition:border .2s,box-shadow .2s}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(14,124,134,.12)}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:.85rem;color:var(--grey)}
+.consent input{width:auto;margin-top:3px}
+
+/* tier evidence pills */
+.tier{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-right:8px}
+.tier.t1{background:#E3F2E8;color:#2E7D4F}
+.tier.t2{background:#E5EEF6;color:#2C5F8A}
+.tier.t3{background:#FBF0E2;color:#9A6B12}
+.tier.t4{background:#F0EAF6;color:#6B4A8A}
+
+/* pill row */
+.pillrow{display:flex;flex-wrap:wrap;gap:10px}
+.pill{border:1px solid var(--line);background:#fff;border-radius:30px;padding:8px 16px;font-size:.85rem;font-weight:500;color:var(--slate)}
+.band-navy .pill{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.16);color:#C6D4E0}
+
+/* split visual two-buildings */
+.twin{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.twin .bld{border:1px solid var(--line);border-radius:14px;padding:26px;text-align:center;background:#fff}
+.twin .bld svg{width:100%;height:150px}
+
+hr.rule{border:none;border-top:1px solid var(--line);margin:0}
+.section-head{max-width:62ch;margin-bottom:44px}
+.section-head.center{margin-left:auto;margin-right:auto}
+
+@media(max-width:980px){
+  .hero-grid{grid-template-columns:1fr;gap:36px;min-height:auto;padding-bottom:20px}
+  .hero-visual{min-height:340px;order:2}
+  .g4{grid-template-columns:repeat(2,1fr)}
+  .ft-top{grid-template-columns:1fr 1fr}
+  .stats{grid-template-columns:1fr 1fr}
+}
+@media(max-width:760px){
+  .wrap{padding:0 22px}.nav-inner{padding:13px 22px}
+  .nav-links{position:fixed;inset:62px 0 auto;flex-direction:column;align-items:stretch;background:#fff;
+    border-bottom:1px solid var(--line);padding:14px 22px 22px;gap:2px;box-shadow:var(--shadow-md);
+    transform:translateY(-120%);transition:transform .3s var(--ease);margin-left:0}
+  .nav-links.open{transform:none}
+  .nav-item>a{padding:13px 8px}.dropdown{position:static;opacity:1;visibility:visible;transform:none;
+    box-shadow:none;border:none;padding:0 0 8px 14px;min-width:0}
+  .nav-item:hover>a svg{transform:none}
+  .burger{display:block;margin-left:auto}
+  .nav-cta{display:none}
+  .g2,.g3,.g4,.compare,.twin,.stats{grid-template-columns:1fr}
+  .compare .col{border-right:none;border-bottom:1px solid var(--line)}
+  .ft-top{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<!-- shared SVG defs: logo mark used in nav + footer -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<g id="tg-mark">
+  <line x1="45" y1="20" x2="105" y2="45"/><line x1="105" y1="45" x2="80" y2="100"/>
+  <line x1="80" y1="100" x2="20" y2="80"/><line x1="20" y1="80" x2="45" y2="20"/>
+  <line x1="20" y1="80" x2="105" y2="45"/>
+  <circle cx="45" cy="20" r="10"/><circle cx="105" cy="45" r="10"/>
+  <circle cx="80" cy="100" r="10"/><circle cx="20" cy="80" r="10"/>
+</g>
+</defs></svg>
+
+<div id="app"></div>
+<script>
+/* ============================================================
+   TheraGraph site — hash router + page registry
+   ============================================================ */
+const ICONS = {
+  chevron:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>',
+  arrow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>',
+  shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+  lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>',
+  graph:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M6.7 7.4l4.6 9.2M17.3 7.4l-4.6 9.2M7 6h10"/></svg>',
+  pill:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="8" rx="4" transform="rotate(45 12 12)"/><path d="M8.5 8.5l7 7"/></svg>',
+  layers:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l9 5-9 5-9-5 9-5z"/><path d="M3 12l9 5 9-5M3 17l9 5 9-5"/></svg>',
+  plug:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6M15 2v6M7 8h10v3a5 5 0 01-10 0V8zM12 16v6"/></svg>',
+  doc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>',
+  pulse:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>',
+  building:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 7h.01M15 7h.01M9 11h.01M15 11h.01M9 15h.01M15 15h.01"/></svg>',
+  server:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></svg>',
+  flask:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7l-6 10a1.5 1.5 0 001.3 2.3h13.4A1.5 1.5 0 0020 19l-6-10V2M8 2h8"/></svg>',
+  eye:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>',
+  refresh:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-3-6.7L21 8M21 3v5h-5"/></svg>',
+  globe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg>',
+  scale:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 21h14M6 7l-3 7h6l-3-7zM18 7l-3 7h6l-3-7zM6 7l6-2 6 2"/></svg>',
+};
+
+const MARK = s => `<svg viewBox="0 0 120 120" style="${s||''}"><use href="#tg-mark" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="currentColor"/></svg>`;
+
+function brand(forFooter){
+  return `<div class="brand" data-link="home">
+    <span style="color:${forFooter?'#fff':'var(--navy)'};display:flex">${MARK('width:30px;height:30px')}</span>
+    <span class="wm"><span class="t1">Thera</span><span class="t2">Graph</span><span class="t3">AI</span></span>
+  </div>`;
+}
+function header(){
+  return `<header class="nav" id="nav"><div class="nav-inner">
+    ${brand()}
+    <nav class="nav-links" id="navlinks">
+      <div class="nav-item"><a>Product ${ICONS.chevron}</a>
+        <div class="dropdown">
+          <a data-link="how">How it works<span>Five layers from order to cited answer</span></a>
+          <a data-link="closed">The closed system<span>TheraVault &mdash; zero data egress</span></a>
+          <a data-link="modules">Modules<span>One foundation, a growing portfolio</span></a>
+          <a data-link="integration">Integration<span>FHIR &middot; SMART on FHIR &middot; CDS Hooks</span></a>
+          <a data-link="security">Security &amp; governance<span>Built as a regulated device</span></a>
+        </div></div>
+      <div class="nav-item"><a>Solutions ${ICONS.chevron}</a>
+        <div class="dropdown">
+          <a data-link="sol-hospitals">For Hospitals &amp; Pharmacy<span>Fewer, better alerts</span></a>
+          <a data-link="sol-it">For IT &amp; Governance<span>A perimeter you can prove</span></a>
+          <a data-link="sol-lifesci">For Life Sciences<span>Closed-corpus AI on your data</span></a>
+        </div></div>
+      <div class="nav-item"><a>Company ${ICONS.chevron}</a>
+        <div class="dropdown">
+          <a data-link="about">About<span>Who we are, what we believe</span></a>
+          <a data-link="why">Why TheraGraph<span>The differentiation, in one page</span></a>
+          <a data-link="evidence">Evidence<span>The literature behind the design</span></a>
+          <a data-link="careers">Careers<span>Build clinical AI worth trusting</span></a>
+        </div></div>
+      <div class="nav-item"><a data-link="contact">Contact</a></div>
+      <a class="btn btn-primary nav-cta" data-link="contact">Book a technical briefing</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div></header>`;
+}
+function ctaBand(){
+  return `<section class="section-pad"><div class="wrap"><div class="cta-band reveal">
+    <div class="eyebrow">See it on your own protocols</div>
+    <h2>Bring the AI to your data &mdash; not your data to the AI.</h2>
+    <p>Book a technical briefing and we&rsquo;ll walk through the closed-system architecture, the reasoning engine, and how it deploys inside your perimeter.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" data-link="contact">Book a technical briefing ${ICONS.arrow}</a>
+      <a class="btn btn-secondary" data-link="why">Why TheraGraph</a>
+    </div>
+  </div></div></section>`;
+}
+function footer(){
+  const col=(h,links)=>`<div><h4>${h}</h4><ul>${links.map(l=>`<li><a data-link="${l[1]}">${l[0]}</a></li>`).join('')}</ul></div>`;
+  return `<footer class="ft"><div class="wrap">
+    <div class="ft-top">
+      <div>${brand(true)}<p class="ft-tag">Protocol-locked clinical intelligence. Your protocols. Your data. Your AI. Nothing else.</p></div>
+      ${col('Product',[['How it works','how'],['Closed system','closed'],['Modules','modules'],['Integration','integration'],['Security & governance','security']])}
+      ${col('Solutions',[['Hospitals & Pharmacy','sol-hospitals'],['IT & Governance','sol-it'],['Life Sciences','sol-lifesci']])}
+      ${col('Company',[['About','about'],['Why TheraGraph','why'],['Evidence','evidence'],['Careers','careers'],['Contact','contact']])}
+      ${col('Legal',[['Privacy Policy','privacy'],['Terms of Use','terms'],['Cookie Policy','cookies'],['Responsible AI','responsible']])}
+    </div>
+    <div class="ft-bot">
+      <span>&copy; ${new Date().getFullYear()} TheraGraph AI.</span>
+      <span class="ft-disclaim">Decision support for qualified healthcare professionals. Outputs are advisory; all clinical decisions remain the clinician&rsquo;s responsibility.</span>
+    </div>
+  </div></footer>`;
+}
+const sectionHead=(eyebrow,title,lede,center)=>`<div class="section-head ${center?'center':''} reveal">
+  ${eyebrow?`<div class="eyebrow">${eyebrow}</div>`:''}<h2>${title}</h2>${lede?`<p class="lede" style="margin-top:14px">${lede}</p>`:''}</div>`;
+const card=(ico,h,p,cls)=>`<div class="card ${cls||''} reveal">${ico?`<div class="ico">${ICONS[ico]}</div>`:''}<h3>${h}</h3><p>${p}</p></div>`;
+const pageHead=(crumb,eyebrow,title,lede)=>`<section class="page-head"><div class="wrap reveal in">
+  <div class="breadcrumb"><a data-link="home">Home</a> &nbsp;/&nbsp; ${crumb}</div>
+  <div class="eyebrow">${eyebrow}</div><h1>${title}</h1>${lede?`<p class="lede" style="margin-top:20px">${lede}</p>`:''}</div></section>`;
+
+function vaultDiagram(){
+  return `<svg class="vault-diagram" viewBox="0 0 520 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Closed-system data flow diagram">
+    <defs><linearGradient id="vaultg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0E2A45"/><stop offset="1" stop-color="#0B1F33"/></linearGradient></defs>
+    <rect x="20" y="40" width="120" height="56" rx="10" fill="#fff" stroke="#C9D6DE"/>
+    <text x="80" y="64" text-anchor="middle" font-family="Inter" font-size="13" font-weight="600" fill="#0B1F33">Clinician</text>
+    <text x="80" y="82" text-anchor="middle" font-family="Inter" font-size="11" fill="#6B7A8D">enters med order</text>
+    <rect x="20" y="120" width="120" height="56" rx="10" fill="#fff" stroke="#C9D6DE"/>
+    <text x="80" y="144" text-anchor="middle" font-family="Inter" font-size="13" font-weight="600" fill="#0B1F33">EPR</text>
+    <text x="80" y="162" text-anchor="middle" font-family="Inter" font-size="11" fill="#6B7A8D">FHIR / CDS Hooks</text>
+    <rect x="170" y="20" width="330" height="300" rx="16" fill="none" stroke="#0E7C86" stroke-width="2" stroke-dasharray="8 6"/>
+    <text x="335" y="44" text-anchor="middle" font-family="Inter" font-size="11" font-weight="700" letter-spacing="1.5" fill="#0E7C86">YOUR FIREWALL</text>
+    <rect x="196" y="64" width="280" height="226" rx="12" fill="url(#vaultg)"/>
+    <text x="336" y="92" text-anchor="middle" font-family="Inter" font-size="14" font-weight="700" fill="#fff">TheraVault</text>
+    <g font-family="Inter" font-size="12">
+      <rect x="220" y="108" width="232" height="40" rx="8" fill="rgba(19,163,174,.16)" stroke="rgba(19,163,174,.45)"/>
+      <text x="336" y="133" text-anchor="middle" fill="#fff">Local inference &middot; hybrid engine</text>
+      <rect x="220" y="158" width="232" height="40" rx="8" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.14)"/>
+      <text x="336" y="183" text-anchor="middle" fill="#C6D4E0">Protocol vault (your formulary)</text>
+      <rect x="220" y="208" width="232" height="40" rx="8" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.14)"/>
+      <text x="336" y="233" text-anchor="middle" fill="#C6D4E0">Immutable audit log</text>
+    </g>
+    <path class="vd-flow" d="M140 148 H196" fill="none" stroke="#0E7C86" stroke-width="2.5"/>
+    <path class="vd-flow" d="M196 262 H150 V96" fill="none" stroke="#13A3AE" stroke-width="2.5"/>
+    <polygon points="150,96 146,104 154,104" fill="#13A3AE"/>
+    <rect x="20" y="300" width="120" height="56" rx="10" fill="#EAF3F4" stroke="#0E7C86"/>
+    <text x="80" y="324" text-anchor="middle" font-family="Inter" font-size="12" font-weight="600" fill="#0B1F33">Cited alert</text>
+    <text x="80" y="341" text-anchor="middle" font-family="Inter" font-size="10.5" fill="#0E7C86">in prescribing screen</text>
+    <g class="vd-blocked">
+      <text x="406" y="392" text-anchor="middle" font-family="Inter" font-size="11" fill="#A9B6C2">open internet</text>
+      <line x1="486" y1="372" x2="510" y2="348" stroke="#D08A8A" stroke-width="2.4"/>
+      <line x1="510" y1="372" x2="486" y2="348" stroke="#D08A8A" stroke-width="2.4"/>
+    </g>
+    <circle class="vd-pulse" cx="336" cy="128" r="46" fill="rgba(19,163,174,.10)"/>
+  </svg>`;
+}
+
+/* ============================================================
+   PAGES
+   ============================================================ */
+const PAGES = {};
+function twinSvg(letter){
+  const c = letter==='A' ? '#0E7C86' : '#13A3AE';
+  return `<svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+    <rect x="60" y="20" width="80" height="110" rx="6" fill="none" stroke="#C9D6DE" stroke-width="2"/>
+    <rect x="68" y="20" width="64" height="110" rx="4" fill="none" stroke="#C9D6DE" stroke-width="1" stroke-dasharray="4 4"/>
+    ${letter==='A'
+      ? `<circle cx="88" cy="58" r="6" fill="${c}"/><circle cx="118" cy="48" r="6" fill="${c}"/><circle cx="100" cy="86" r="6" fill="${c}"/><path d="M88 58 L118 48 L100 86 Z" fill="none" stroke="${c}" stroke-width="2"/>`
+      : `<circle cx="84" cy="50" r="6" fill="${c}"/><circle cx="116" cy="64" r="6" fill="${c}"/><circle cx="92" cy="92" r="6" fill="${c}"/><path d="M84 50 L116 64 L92 92" fill="none" stroke="${c}" stroke-width="2"/>`}
+    <text x="100" y="118" text-anchor="middle" font-family="Inter" font-size="11" fill="#6B7A8D">your data only</text>
+  </svg>`;
+}
+
+/* ---------- HOME ---------- */
+PAGES.home = ()=>`
+<section class="hero"><div class="bg-mesh"></div><div class="wrap"><div class="hero-grid">
+  <div>
+    <div class="eyebrow reveal in">Closed-system clinical AI</div>
+    <h1 class="reveal in d1">The clinical AI that only knows what your institution knows.</h1>
+    <p class="lede reveal in d2">TheraGraph reasons over your own protocols, your own formulary and your own patient data &mdash; behind your own firewall. No data, prompt, or model weight ever leaves your perimeter.</p>
+    <div class="hero-cta reveal in d3">
+      <a class="btn btn-primary" data-link="contact">Book a technical briefing ${ICONS.arrow}</a>
+      <a class="btn btn-secondary" data-link="closed">See how the closed system works</a>
+    </div>
+    <div class="hero-micro reveal in d4">${ICONS.lock} On-premise or private regional cloud &middot; Built for any medical institution, in any jurisdiction.</div>
+  </div>
+  <div class="hero-visual reveal in d2">${vaultDiagram()}</div>
+</div></div></section>
+
+<section class="section-pad band-off"><div class="wrap">
+  ${sectionHead('Why this matters','Two tools dominate medication safety. Both are failing clinicians.','Adverse drug reactions remain a leading, preventable cause of hospital harm worldwide &mdash; and drug&ndash;drug interactions are the share most amenable to context-aware AI.')}
+  <div class="grid g2">
+    ${card('pulse','Static rule-based checkers','They fire the same alert for every patient, regardless of context. Clinicians have learned to ignore them &mdash; published meta-analyses put interaction-alert override rates around 90%. The signal is buried in noise.')}
+    ${card('eye','General-purpose AI models','Unbounded, prone to hallucination, and they send data outside the institution. They are unsafe for prescribing and impossible to certify as a medical device.')}
+  </div>
+  <div style="margin-top:34px" class="stats reveal">
+    <div class="stat"><div class="big"><em>~90%</em></div><div class="lbl">Pooled DDI alert override rate across 16 studies (Felisberto et al., 2024)</div></div>
+    <div class="stat"><div class="big"><em>4&ndash;6th</em></div><div class="lbl">Fatal ADRs ranked among leading causes of death in a landmark US analysis (Lazarou, 1998)</div></div>
+    <div class="stat"><div class="big"><em>$42bn</em></div><div class="lbl">Estimated global cost of medication error annually (WHO, 2017)</div></div>
+  </div>
+  <p class="caption reveal" style="margin-top:18px">Figures describe the published evidence base for the problem space, not TheraGraph outcomes. See <a data-link="evidence">Evidence</a>.</p>
+</div></section>
+
+<section class="section-pad"><div class="wrap">
+  ${sectionHead('Where TheraGraph sits','Pharmacologically advanced. Architecturally disciplined.','Advanced enough to model patient-specific interaction risk. Disciplined enough that nothing ever leaves your perimeter.')}
+  <div class="compare reveal">
+    <div class="col"><span class="badge">Consumer / general AI</span><h4>Unbounded &amp; unaccountable</h4><p>Hallucinate, no data residency, no citation, not accountable for clinical outcomes.</p></div>
+    <div class="col"><span class="badge">Cloud decision support</span><h4>Data leaves the building</h4><p>Egress, foreign ownership, and the sovereignty risk every breach headline reinforces.</p></div>
+    <div class="col win"><span class="badge">TheraGraph</span><h4>Advanced, bounded, yours</h4><p>Patient-contextual AI tuned to your own rules, with a cited source on every output &mdash; and zero egress by design.</p></div>
+  </div>
+</div></section>
+
+<section class="section-pad band-navy"><div class="wrap"><div class="hero-grid" style="min-height:auto">
+  <div>
+    <div class="eyebrow">TheraVault &middot; the closed system</div>
+    <h2 style="margin-bottom:18px">Your data never leaves the building. The AI only knows what you approved.</h2>
+    <p class="lede" style="color:#B9CAD8;margin-bottom:26px">Data residency isn&rsquo;t a setting you trust us to honour &mdash; it&rsquo;s an architecture you can verify.</p>
+    <ul class="commit">
+      <li><span class="ck">${ICONS.check}</span><span><b>Data never leaves your environment</b> &mdash; verifiable with egress firewall rules and attested data-flow records.</span></li>
+      <li><span class="ck">${ICONS.check}</span><span><b>The AI is bounded</b> &mdash; no open-web search, no model recall outside your approved knowledge.</span></li>
+      <li><span class="ck">${ICONS.check}</span><span><b>No training on your data without written opt-in</b> &mdash; and even then, inside your walls.</span></li>
+      <li><span class="ck">${ICONS.check}</span><span><b>Every answer is explainable</b> &mdash; each output cites a verbatim source your clinician can open.</span></li>
+    </ul>
+    <div style="margin-top:26px"><a class="btn btn-secondary" data-link="closed">Explore the closed system ${ICONS.arrow}</a></div>
+  </div>
+  <div class="reveal">${vaultDiagram()}</div>
+</div></div></section>
+
+<section class="section-pad"><div class="wrap">
+  ${sectionHead('The capability no one else offers','Two hospitals running TheraGraph get two different brains.','With your written opt-in, TheraGraph tunes its models on your own historical prescribing, formulary and protocols &mdash; entirely within your environment. The base model ships in; the tuned model stays in.')}
+  <div class="twin reveal">
+    <div class="bld">${twinSvg('A')}<h3 style="margin-top:14px">Hospital A</h3><p class="caption">Tuned to A&rsquo;s formulary, pathways &amp; risk tolerance.</p></div>
+    <div class="bld">${twinSvg('B')}<h3 style="margin-top:14px">Hospital B</h3><p class="caption">A different model, shaped by B&rsquo;s own data &mdash; never pooled.</p></div>
+  </div>
+  <p class="reveal" style="margin:26px auto 0;text-align:center;max-width:60ch;color:var(--slate)">This is the opposite of one-size-fits-all cloud decision support &mdash; and it is extremely hard for a multi-tenant platform to replicate.</p>
+</div></section>
+
+<section class="section-pad band-off"><div class="wrap">
+  ${sectionHead('Built on the same closed-system rails','Start with interaction safety. Scale without new hardware.','Every module runs inside the same TheraVault. Add capability as you&rsquo;re ready &mdash; no new platform, no new data-sharing.')}
+  <div class="grid g3">
+    ${card('graph','Patient-contextual DDI engine','The flagship &mdash; interaction checking that reasons over the individual patient&rsquo;s meds, labs and comorbidities, not a static lookup.','feature')}
+    ${card('pill','Polypharmacy &amp; deprescribing','Medication-burden review and deprescribing candidates for complex patients.')}
+    ${card('scale','Renal / hepatic dosing','Organ-function-aware dosing against your formulary and protocols.')}
+    ${card('refresh','Medication reconciliation','Reconciles meds across admission, transfer and discharge; flags discrepancies.')}
+    ${card('shield','Antimicrobial stewardship','Protocol-aligned appropriateness, de-escalation and duration prompts.')}
+    ${card('pulse','ADR prediction','Flags patients at elevated risk of specific adverse reactions from their own record.')}
+  </div>
+  <div style="margin-top:34px;text-align:center" class="reveal"><a class="btn btn-secondary" data-link="modules">See all modules ${ICONS.arrow}</a></div>
+</div></section>
+
+<section class="section-pad"><div class="wrap">
+  ${sectionHead('Built for institutions that can&rsquo;t compromise on data','For the people accountable for medication safety &mdash; and for the data.')}
+  <div class="grid g3">
+    ${card('building','Hospital pharmacy &amp; clinical teams','Cut alert noise, catch the interactions that matter, keep clinicians in control.')}
+    ${card('lock','CIOs, CCIOs &amp; governance leads','Advanced AI with zero data egress and a perimeter you can prove.')}
+    ${card('flask','Life-sciences &amp; pharma teams','Closed-corpus AI over your own safety and medical data, inside your own walls.')}
+  </div>
+</div></section>
+
+${ctaBand()}
+`;
+
+/* ---------- HOW IT WORKS ---------- */
+PAGES.how = ()=>`
+${pageHead('Product / How it works','How it works','Five layers between a medication order and a cited, patient-specific answer.','From the EPR event to the audit log &mdash; every step runs inside your perimeter, and every output points to a source you can open.')}
+<section class="section-pad"><div class="wrap"><div class="hero-grid" style="min-height:auto">
+  <div class="steps reveal">
+    <div class="step"><div class="num"></div><div><h3>Data layer</h3><p>Patient context arrives via open standards (HL7 FHIR), normalised to standard medicines terminologies &mdash; so the engine localises to any market.</p></div></div>
+    <div class="step"><div class="num"></div><div><h3>Protocol vault</h3><p>A local index of your formulary, antimicrobial and dosing protocols and pathways, curated by your own pharmacists.</p></div></div>
+    <div class="step"><div class="num"></div><div><h3>Closed-system reasoning</h3><p>Retrieval-augmented generation strictly over your approved knowledge &mdash; never the open web.</p></div></div>
+    <div class="step"><div class="num"></div><div><h3>Hybrid risk scoring</h3><p>Deterministic rules guarantee the must-never-miss catches; a knowledge graph adds mechanistic reach; a locally-tuned model adds patient context; outlier detection flags the unusual.</p></div></div>
+    <div class="step"><div class="num"></div><div><h3>Output &amp; audit</h3><p>A ranked, cited alert with a suggested alternative and a one-click justified override &mdash; written to an immutable log.</p></div></div>
+  </div>
+  <div class="reveal" style="position:sticky;top:100px">${vaultDiagram()}</div>
+</div></div></section>
+
+<section class="section-pad band-off"><div class="wrap">
+  ${sectionHead('The technical signature','A single model can&rsquo;t be both creative and safe. So we don&rsquo;t use one.','General-purpose models hallucinate and can&rsquo;t cite. Pure rule engines can&rsquo;t reason about the individual patient. TheraGraph combines three layers, each covering the others&rsquo; weakness.')}
+  <div class="grid g3">
+    ${card('shield','Deterministic rules','Guarantee the critical, must-never-miss catches with full predictability.')}
+    ${card('graph','Biomedical knowledge graph','Drugs, enzymes and pathways modelled as relationships &mdash; mechanistic, explainable reach beyond the literature&rsquo;s explicit pairs.')}
+    ${card('layers','Retrieval-constrained model','A locally-tuned language model anchored to your validated guidelines, with retrieval that makes hallucination structurally impossible.')}
+  </div>
+  <div class="callout reveal" style="margin-top:32px"><h3>The combination is the moat</h3><p>The graph gives reach beyond the literature&rsquo;s explicit pairs; retrieval removes hallucination; the rules guarantee the critical catches. No single model does all three &mdash; and the published evidence agrees that hybrid, knowledge-grounded approaches reduce false positives. See <a data-link="evidence">Evidence</a>.</p></div>
+</div></section>
+${ctaBand()}
+`;
+
+/* ---------- CLOSED SYSTEM ---------- */
+PAGES.closed = ()=>`
+${pageHead('Product / The closed system','TheraVault &middot; the closed system','A clinical AI that physically cannot leak your data.','Data residency isn&rsquo;t a setting you trust us to honour &mdash; it&rsquo;s an architecture you can verify. TheraVault is the disconnected, local environment every TheraGraph product runs inside.')}
+<section class="section-pad"><div class="wrap"><div class="hero-grid" style="min-height:auto">
+  <div>
+    <h2 style="margin-bottom:20px">Five architectural commitments</h2>
+    <div class="vault-box reveal"><div class="inner">
+      <ul class="commit" style="gap:12px">
+        <li style="background:var(--off-white);border-color:var(--line)"><span class="ck" style="background:var(--pale-teal)">${ICONS.check}</span><span style="color:var(--slate)"><b style="color:var(--navy)">Data never leaves your environment</b> &mdash; verifiable with egress firewall rules and attested data-flow records.</span></li>
+        <li style="background:var(--off-white);border-color:var(--line)"><span class="ck" style="background:var(--pale-teal)">${ICONS.check}</span><span style="color:var(--slate)"><b style="color:var(--navy)">The AI is bounded</b> &mdash; no open-web search, no recall outside your approved knowledge.</span></li>
+        <li style="background:var(--off-white);border-color:var(--line)"><span class="ck" style="background:var(--pale-teal)">${ICONS.check}</span><span style="color:var(--slate)"><b style="color:var(--navy)">No training on your data without written opt-in</b> &mdash; and even then, inside your walls.</span></li>
+        <li style="background:var(--off-white);border-color:var(--line)"><span class="ck" style="background:var(--pale-teal)">${ICONS.check}</span><span style="color:var(--slate)"><b style="color:var(--navy)">Full explainability</b> &mdash; every output cites a verbatim source your clinician can open.</span></li>
+        <li style="background:var(--off-white);border-color:var(--line)"><span class="ck" style="background:var(--pale-teal)">${ICONS.check}</span><span style="color:var(--slate)"><b style="color:var(--navy)">Controlled updates</b> &mdash; cryptographically signed, validated side-by-side, never silently pushed.</span></li>
+      </ul>
+    </div></div>
+  </div>
+  <div class="reveal" style="position:sticky;top:100px">${vaultDiagram()}</div>
+</div></div></section>
+
+<section class="section-pad band-off"><div class="wrap">
+  ${sectionHead('Three ways to deploy','Match the perimeter to your sensitivity.')}
+  <div class="grid g3">
+    ${card('server','On-premise / air-gapped','For the highest-sensitivity institutions. Weights, vectors and audit all stay local; updates arrive on signed, encrypted media.')}
+    ${card('lock','Private regional cloud','Single-tenant managed hosting, in your region, with keys you hold (BYOK / HYOK).')}
+    ${card('layers','Hybrid','Protected data and the protocol vault stay on-prem; non-sensitive inference can burst to a private regional pool.')}
+  </div>
+  <div class="callout reveal" style="margin-top:32px"><h3>The honest trade-off</h3><p>Closed-system delivery costs more per site than multi-tenant cloud &mdash; we&rsquo;re candid about that. What you buy with it is defensible data sovereignty, a smaller breach blast-radius, and an AI tuned to you. For smaller sites we recommend the private-cloud variant rather than full on-prem.</p></div>
+</div></section>
+${ctaBand()}
+`;
+
+/* ---------- MODULES ---------- */
+PAGES.modules = ()=>{
+  const row=(n,d)=>`<tr><td class="lead">${n}</td><td>${d}</td></tr>`;
+  return `
+${pageHead('Product / Modules','One foundation, a growing portfolio','Start with interaction safety. Add capability without adding hardware.','Every module runs inside the same TheraVault &mdash; no new platform, no new data-sharing, no new perimeter to defend.')}
+<section class="section-pad"><div class="wrap">
+  ${sectionHead('Core medication-safety modules','Brand-defining. The flagship leads; the rest are satellites on the same rails.')}
+  <div class="tbl-wrap reveal"><table class="data">
+    <thead><tr><th style="width:34%">Module</th><th>What it does</th></tr></thead>
+    <tbody>
+      ${row('Patient-contextual DDI engine &mdash; flagship','Interaction checking that reasons over the individual patient&rsquo;s meds, labs and comorbidities, not a static lookup.')}
+      ${row('Polypharmacy &amp; deprescribing review','Medication-burden review and deprescribing candidates for complex patients.')}
+      ${row('Renal / hepatic dose adjustment','Organ-function-aware dosing against your formulary and protocols.')}
+      ${row('Medication reconciliation','Reconciles meds across admission, transfer and discharge; flags discrepancies.')}
+      ${row('Antimicrobial stewardship','Protocol-aligned appropriateness, de-escalation and duration prompts.')}
+      ${row('ADR prediction','Flags patients at elevated risk of specific adverse reactions from their own record.')}
+      ${row('Dose-error reduction','Catches out-of-range, weight-based and paediatric dosing errors at point of order.')}
+      ${row('High-alert medication safeguards','Extra checks on insulin, anticoagulants, opioids and chemotherapy against local rules.')}
+    </tbody>
+  </table></div>
+</div></section>
+<section class="section-pad band-off"><div class="wrap">
+  ${sectionHead('Pharmacy &amp; medicines operations','Lower-regulation, fast-ROI tools that run on the same rails.')}
+  <div class="grid g3">
+    ${card('doc','Formulary management','Keeps prescribing aligned to the current local formulary; flags off-formulary.')}
+    ${card('scale','Prescribing optimisation','Cost and therapeutic-equivalent switching within approved options.')}
+    ${card('pill','Dispensing support','Verification, label/pick checks, look-alike / sound-alike flags.')}
+    ${card('refresh','Inventory &amp; waste forecasting','Demand prediction and expiry/waste reduction on local stock data.')}
+    ${card('pulse','Adherence prediction','Flags likely non-adherence from dispensing and refill patterns.')}
+    ${card('layers','Expanding','Pharmacovigilance, trial matching and more &mdash; sequenced behind the proven core.')}
+  </div>
+  <p class="caption reveal" style="margin-top:22px">Module descriptions are neutral capability statements. They do not imply current certification or live deployment.</p>
+</div></section>
+${ctaBand()}
+`;};
+
+/* ---------- INTEGRATION ---------- */
+PAGES.integration = ()=>`
+${pageHead('Product / Integration','Standards-based integration','The alert appears in your prescribing screen. The reasoning never left your servers.','Built once on FHIR R4 + SMART on FHIR + CDS Hooks, bound to standard medicines terminologies, and certified per EPR vendor &mdash; so no single platform holds the keys.')}
+<section class="section-pad"><div class="wrap"><div class="hero-grid" style="min-height:auto">
+  <div>
+    <h2 style="margin-bottom:18px">The workflow</h2>
+    <p class="lede">A clinician enters a medication order. A SMART-on-FHIR / CDS Hooks trigger sends the medication list and relevant history to your local TheraVault instance. The engine reasons in-memory and returns a structured, cited warning that overlays directly in the EPR.</p>
+    <p style="font-weight:600;color:var(--navy);margin-top:8px">The clinician never leaves their workflow; the data never leaves your perimeter.</p>
+    <div class="pillrow reveal" style="margin-top:24px">
+      <span class="pill">HL7 FHIR R4</span><span class="pill">SMART on FHIR</span><span class="pill">CDS Hooks</span><span class="pill">SNOMED CT</span><span class="pill">HL7 v2</span>
+    </div>
+  </div>
+  <div class="reveal" style="position:sticky;top:100px">${vaultDiagram()}</div>
+</div></div></section>
+<section class="section-pad band-off"><div class="wrap">
+  ${sectionHead('What we build on','Multi-vendor by design.')}
+  <div class="grid g3">
+    ${card('plug','Open standards','HL7 v2, FHIR R4, SMART on FHIR and CDS Hooks &mdash; the validated route to in-workflow decision support.')}
+    ${card('graph','Terminologies','SNOMED CT and the relevant national medicines dictionary for each market.')}
+    ${card('layers','Per-vendor certification','Architected once, then adapted and certified through each EPR vendor&rsquo;s partner programme &mdash; so no single platform holds pricing power.')}
+  </div>
+  <p class="caption reveal" style="margin-top:22px">CDS Hooks maturity varies by EPR vendor; integration is certified per vendor. Standards marks shown denote supported open standards, not partnerships or endorsements.</p>
+</div></section>
+${ctaBand()}
+`;
+
+/* ---------- SECURITY ---------- */
+PAGES.security = ()=>`
+${pageHead('Product / Security &amp; governance','Safety &amp; governance by design','We engineer ahead of the compliance curve &mdash; not behind it.','TheraGraph is being built as a regulated software medical device, designed against the recognised international standards for quality, risk, software lifecycle, security and AI management.')}
+<section class="section-pad"><div class="wrap">
+  ${sectionHead('How we build','Caution and rigour as the product, not the constraint.')}
+  <div class="grid g2">
+    ${card('shield','Clinical safety','A named Clinical Safety Officer owns the clinical safety case. Outputs are decision support &mdash; the clinician always decides.')}
+    ${card('scale','Designed against recognised standards','Device quality management, risk management, software lifecycle, information security, and AI management.')}
+    ${card('lock','Security architecture','Encryption at rest with hardware validation, role-based access through your own identity provider, full audit logging, and a closed perimeter that shrinks the breach blast-radius.')}
+    ${card('eye','Explainability &amp; auditability','Every recommendation is citable; every decision and override is logged immutably.')}
+  </div>
+  <div class="pillrow reveal" style="margin-top:30px;justify-content:center">
+    <span class="pill">Quality management</span><span class="pill">Risk management</span><span class="pill">Software lifecycle</span><span class="pill">Information security</span><span class="pill">AI management</span><span class="pill">Clinical safety</span>
+  </div>
+</div></section>
+<section class="section-pad band-navy"><div class="wrap center" style="max-width:760px;margin:0 auto">
+  <div class="eyebrow">The clinician decides</div>
+  <h2 style="margin-bottom:16px">Decision support, not autonomous decision-making.</h2>
+  <p class="lede" style="color:#B9CAD8;margin:0 auto">TheraGraph surfaces risk, cites the source, and suggests an alternative &mdash; then steps back. The qualified clinician makes every call, and the system is engineered to keep it that way.</p>
+  <div style="margin-top:26px"><a class="btn btn-secondary" data-link="responsible">Read our Responsible AI statement ${ICONS.arrow}</a></div>
+</div></section>
+${ctaBand()}
+`;
+
+/* ---------- SOLUTIONS ---------- */
+function solution(crumb,eyebrow,title,lede,bullets,links){
+  return `
+${pageHead('Solutions / '+crumb,eyebrow,title,lede)}
+<section class="section-pad"><div class="wrap">
+  ${sectionHead('What TheraGraph gives you','')}
+  <div class="grid g2">${bullets.map(b=>card(b[0],b[1],b[2])).join('')}</div>
+  <div style="margin-top:34px;display:flex;gap:14px;flex-wrap:wrap" class="reveal">
+    ${links.map(l=>`<a class="btn btn-secondary" data-link="${l[1]}">${l[0]} ${ICONS.arrow}</a>`).join('')}
+  </div>
+</div></section>
+${ctaBand()}`;
+}
+PAGES['sol-hospitals']=()=>solution(
+  'Hospitals & Pharmacy','For hospital pharmacy & clinical teams',
+  'Catch the interactions that matter. Silence the ones that don&rsquo;t.',
+  'Patient-contextual reasoning cuts alert noise and keeps clinicians in control &mdash; tuned to your formulary, your protocols, your patients.',
+  [['pulse','Fewer, better alerts','Relevance scoring instead of the same warning for every patient.'],
+   ['graph','Tuned to your house style','Your formulary and pathways, not a generic library.'],
+   ['eye','Clinician-final-authority','Cited alerts, suggested alternatives, one-click justified override.'],
+   ['refresh','Reconciliation that holds','Catches discrepancies across admission, transfer and discharge.']],
+  [['DDI engine','modules'],['Integration','integration']]
+);
+PAGES['sol-it']=()=>solution(
+  'IT & Governance','For CIOs, CCIOs & information-governance leads',
+  'Advanced AI with a perimeter you can prove.',
+  'Zero data egress by design, standards-based integration, and an audit trail for everything &mdash; the AI capability your clinicians want without the data risk you can&rsquo;t accept.',
+  [['lock','Zero egress, provable','Egress rules and attested data-flow records; keys you hold.'],
+   ['plug','Standards-based, multi-vendor','FHIR / SMART on FHIR / CDS Hooks; no single-vendor lock-in.'],
+   ['shield','Simpler governance','When protected data never leaves, your data-protection assessment gets shorter.'],
+   ['eye','Full auditability','Every decision and override logged immutably for review.']],
+  [['The closed system','closed'],['Security & governance','security']]
+);
+PAGES['sol-lifesci']=()=>solution(
+  'Life Sciences','For pharma & life-sciences teams',
+  'Closed-corpus AI over your own safety and medical data.',
+  'Run advanced reasoning across your own libraries and records &mdash; inside your own environment, with no data leaving your walls.',
+  [['flask','In-perimeter analysis','Within-organisation reasoning over your own safety data and medical library.'],
+   ['graph','Opt-in, in-house tuning','Models shaped to your data without that data ever leaving.'],
+   ['doc','A distinct engagement','Bespoke development and integration via the services team.'],
+   ['shield','Honest scope','Within-organisation evidence &mdash; a single closed system constrains cross-site pooling, and we say so.']],
+  [['How it works','how'],['Contact the team','contact']]
+);
+
+/* ---------- ABOUT ---------- */
+PAGES.about=()=>`
+${pageHead('Company / About','About TheraGraph','We build clinical AI that takes only what the institution gives it.','One conviction shapes everything: advanced AI and absolute data sovereignty should not be a trade-off. So we built a company around making them the same thing.')}
+<section class="section-pad"><div class="wrap">
+  <div class="grid g3">
+    ${card('pulse','Mission','Eliminate preventable adverse drug events by embedding context-aware, privacy-preserving AI directly into clinicians&rsquo; workflows &mdash; without ever compromising data sovereignty.')}
+    ${card('globe','Vision','To become the most trusted provider of closed-system medical AI: every algorithm respects local protocol, runs behind the institution&rsquo;s firewall, and demonstrably improves patient safety.')}
+    ${card('scale','How we work','We don&rsquo;t overclaim. We publish what we find, including what doesn&rsquo;t work. We treat clinicians as colleagues, not a marketing channel.')}
+  </div>
+</div></section>
+<section class="section-pad band-off"><div class="wrap">
+  ${sectionHead('Values','The principles behind the architecture.',null,true)}
+  <div class="pillrow reveal" style="justify-content:center">
+    <span class="pill">Protocol sovereignty</span><span class="pill">Explainable certainty</span><span class="pill">Regulatory anticipation</span><span class="pill">Clinical humility</span><span class="pill">Conservative communication</span>
+  </div>
+</div></section>
+${ctaBand()}
+`;
+
+/* ---------- WHY ---------- */
+PAGES.why=()=>`
+${pageHead('Company / Why TheraGraph','Why TheraGraph','The only clinical AI that&rsquo;s advanced, bounded, and yours.','Four things no one currently ships together &mdash; and the reason that combination is hard to copy.')}
+<section class="section-pad"><div class="wrap">
+  ${sectionHead('The four-part whitespace','')}
+  <div class="grid g2">
+    ${card('graph','Patient-specific reasoning','Models risk from the individual&rsquo;s meds, labs, organ function and comorbidities.')}
+    ${card('doc','Bound to your protocols','Constrained to your own formulary and approved guidelines.')}
+    ${card('lock','Zero data egress','On-premise or private regional cloud, with a provable perimeter.')}
+    ${card('shield','Built as a regulated device','Designed against recognised standards, with a clinical safety case.')}
+  </div>
+</div></section>
+<section class="section-pad band-off"><div class="wrap">
+  ${sectionHead('Why it&rsquo;s hard to copy','')}
+  <div class="callout reveal"><p>Cloud-first incumbents are architecturally committed to data leaving the building &mdash; reversing that is a rebuild, not a feature flag. General-AI vendors can&rsquo;t offer the citation chain or the certification posture. And because each deployment is tuned to one institution&rsquo;s data inside its own walls, the result is a per-institution model a multi-tenant platform structurally can&rsquo;t reproduce.</p></div>
+  <div class="compare reveal" style="margin-top:32px">
+    <div class="col"><span class="badge">Consumer / general AI</span><h4>Unbounded</h4><p>No citation, no residency, not accountable.</p></div>
+    <div class="col"><span class="badge">Cloud decision support</span><h4>Egress by design</h4><p>Reversing it is a rebuild, not a toggle.</p></div>
+    <div class="col win"><span class="badge">TheraGraph</span><h4>Advanced, bounded, yours</h4><p>Per-institution model, cited, certified, sovereign.</p></div>
+  </div>
+</div></section>
+${ctaBand()}
+`;
+
+/* ---------- EVIDENCE ---------- */
+PAGES.evidence=()=>{
+  const row=(t,claim,src)=>`<tr><td>${t}</td><td class="lead">${claim}</td><td>${src}</td></tr>`;
+  return `
+${pageHead('Company / Evidence','The literature behind the design','We publish what we learn &mdash; and we build on what&rsquo;s already known.','The design choices behind TheraGraph are grounded in peer-reviewed literature. We stage that evidence by maturity, and we are explicit about where prospective outcome evidence is still thin.')}
+<section class="section-pad"><div class="wrap">
+  ${sectionHead('Evidence, staged by maturity','Higher tiers carry stronger evidence. We do not claim outcomes the literature has not yet established.')}
+  <div class="tbl-wrap reveal"><table class="data">
+    <thead><tr><th>Tier</th><th style="width:42%">What the literature supports</th><th>Representative sources</th></tr></thead>
+    <tbody>
+      ${row('<span class="tier t1">Tier 1</span>','Medication harm is large and substantially preventable; rule-based alerts are overridden at scale.','Lazarou 1998; Pirmohamed 2004; WHO 2017; Felisberto 2024 (~90% override)')}
+      ${row('<span class="tier t2">Tier 2</span>','Clinical decision support reduces medication error when patient-specific, actionable and in-workflow.','Kawamoto 2005 (BMJ); Roshanov 2013')}
+      ${row('<span class="tier t3">Tier 3</span>','Knowledge-graph + LLM hybrids predict interactions well and cut hallucinations &mdash; strong technical, pre-clinical evidence.','Zitnik 2018 (Decagon); KnowDDI 2024; Hyper-RAG 2026')}
+      ${row('<span class="tier t4">Tier 4</span>','On-premise open models are clinically viable, within a narrowing gap of frontier cloud models.','Meditron-70B 2023; Med-PaLM 2 (2024)')}
+    </tbody>
+  </table></div>
+</div></section>
+<section class="section-pad band-off"><div class="wrap">
+  ${sectionHead('What we are careful not to claim','Epistemic honesty is part of the brand.')}
+  <div class="grid g2">
+    ${card('scale','Outcome evidence is still maturing','Two well-designed RCTs of patient-specific DDI alerting (Duke 2013; Beeler 2019) were null for adherence. We frame TheraGraph as designed to address the limitations those trials surfaced &mdash; not as proof of outcome.')}
+    ${card('eye','Override rates are heterogeneous','&ldquo;~90% override&rdquo; is a population-level meta-analytic estimate (I&sup2; &asymp; 100%), not a universal site figure. We cite it as such.')}
+  </div>
+  <div class="note-inline reveal">This page summarises an internal worldwide literature review. It is provided for transparency about the design rationale and is not a claim of clinical validation of TheraGraph. Our own validation will be designed prospectively and, ideally, multi-site.</div>
+</div></section>
+${ctaBand()}
+`;};
+
+/* ---------- CAREERS ---------- */
+PAGES.careers=()=>`
+${pageHead('Company / Careers','Careers','Build the clinical AI you&rsquo;d trust with your own family&rsquo;s prescription.','We&rsquo;re assembling a team across three rare disciplines &mdash; machine learning, clinical pharmacology, and medical-device regulation &mdash; and engineering the seams between them.')}
+<section class="section-pad"><div class="wrap">
+  ${sectionHead('What we look for','')}
+  <div class="grid g3">
+    ${card('graph','Depth over breadth','We hire specialists and connect them, not generalists who claim all three disciplines.')}
+    ${card('shield','Comfort with rigour','You see regulation and safety as design constraints that make the work better.')}
+    ${card('lock','Conviction about sovereignty','You believe patient data should stay with the patient&rsquo;s institution.')}
+  </div>
+  <div class="callout reveal" style="margin-top:34px"><h3>Open roles</h3><p>We&rsquo;re an early-stage team and roles open as we grow. If your work sits at the intersection of clinical AI, medical-device engineering and safety, we&rsquo;d like to hear from you &mdash; even if you don&rsquo;t see an exact match.</p><div style="margin-top:16px"><a class="btn btn-primary" data-link="contact">Introduce yourself ${ICONS.arrow}</a></div></div>
+</div></section>
+${ctaBand()}
+`;
+
+/* ---------- CONTACT ---------- */
+PAGES.contact=()=>`
+${pageHead('Contact','Talk to the team','Bring the AI to your data &mdash; not your data to the AI.','Book a technical briefing and we&rsquo;ll walk through the closed-system architecture, the reasoning engine, and how it deploys inside your perimeter.')}
+<section class="section-pad"><div class="wrap"><div class="hero-grid" style="min-height:auto;align-items:start">
+  <div>
+    <form class="form reveal" id="briefingForm" onsubmit="return false">
+      <div class="field"><label>Name</label><input type="text" name="name" placeholder="Your name" required></div>
+      <div class="field"><label>Role</label><input type="text" name="role" placeholder="e.g. Chief Pharmacist, CCIO"></div>
+      <div class="field"><label>Institution / organisation</label><input type="text" name="org" placeholder="Where you work"></div>
+      <div class="field"><label>Work email</label><input type="email" name="email" placeholder="you@institution.org" required></div>
+      <div class="field"><label>What you&rsquo;d like to discuss <span class="muted" style="font-weight:400">(optional)</span></label><textarea name="msg" rows="4" placeholder="A line or two helps us prepare."></textarea></div>
+      <label class="consent"><input type="checkbox" required> I agree to TheraGraph processing my details to respond to this enquiry, as described in the <a data-link="privacy">Privacy Policy</a>.</label>
+      <div><button class="btn btn-primary" type="submit">Request a briefing ${ICONS.arrow}</button></div>
+      <p class="caption" id="formNote" style="display:none;color:var(--teal)">Thanks &mdash; this is a prototype form. Wire it to your CRM or email handler before launch.</p>
+    </form>
+  </div>
+  <div class="vault-box reveal"><div class="inner">
+    <h3 style="margin-bottom:12px">What to expect</h3>
+    <p style="font-size:.96rem">A focused technical conversation, not a sales pitch. We&rsquo;ll cover the closed-system architecture, the hybrid reasoning engine, deployment options for your environment, and the governance posture &mdash; and answer whatever your clinical, IT and information-governance teams need.</p>
+    <hr class="rule" style="margin:20px 0">
+    <p class="caption" style="margin:0">For general enquiries: <a href="#">[general enquiries email]</a></p>
+  </div></div>
+</div></div></section>
+`;
+
+/* ---------- LEGAL ---------- */
+function legal(crumb,title,intro,body){
+  return `
+${pageHead('Legal / '+crumb,'Legal',title,intro)}
+<section class="section-pad"><div class="wrap" style="max-width:820px"><div class="prose reveal">${body}</div></div></section>
+`;
+}
+PAGES.privacy=()=>legal('Privacy Policy','Privacy Policy',
+  'How TheraGraph handles information collected through this website &mdash; not patient data processed inside a client deployment, which never reaches us by design.',
+  `<div class="note-inline">Scaffolding copy for development. Not legal advice. Must be reviewed and completed by qualified counsel for each operating market before publishing. Replace all bracketed placeholders.</div>
+   <h2>What we collect</h2><p>Details you submit through our forms (name, role, organisation, email, message) and basic, privacy-respecting site analytics.</p>
+   <h2>Why we collect it</h2><p>To respond to enquiries, arrange briefings, and improve the site.</p>
+   <h2>Sharing</h2><p>We do not sell personal data. Limited processors may support email and hosting under appropriate agreements.</p>
+   <h2>Your rights</h2><p>Access, correction, deletion and objection &mdash; exercised by contacting [data-protection contact]. Legal bases and supervisory-authority details: [to be completed per jurisdiction].</p>
+   <h2>Retention &amp; security</h2><p>Held only as long as needed and protected with appropriate safeguards. Patient data processed within a client&rsquo;s TheraGraph deployment never leaves that environment and is not accessible to us.</p>`);
+PAGES.terms=()=>legal('Terms of Use','Terms of Use',
+  'The terms governing use of this website.',
+  `<div class="note-inline">Scaffolding copy for development. Not legal advice. Governing law, liability caps and dispute resolution are jurisdiction-specific and must be completed by counsel.</div>
+   <h2>Acceptance</h2><p>Using this site means accepting these terms.</p>
+   <h2>Purpose of content</h2><p>The site is informational. Nothing on it is clinical, legal or financial advice, and nothing is an offer or a warranty of any product&rsquo;s regulatory status.</p>
+   <h2>No reliance for clinical decisions</h2><p>Site content must not be used to make patient-care decisions.</p>
+   <h2>Intellectual property</h2><p>Site content and marks belong to TheraGraph.</p>
+   <h2>Disclaimers &amp; liability</h2><p>Standard acceptable-use, disclaimer and liability-limit provisions [to be completed by counsel].</p>`);
+PAGES.cookies=()=>legal('Cookie Policy','Cookie Policy',
+  'We keep cookies to a minimum, in keeping with our data-sovereignty principles.',
+  `<div class="note-inline">Scaffolding copy for development. List actual cookies once analytics is selected. Implement a privacy-first consent banner where reject-all is one click and equal in prominence to accept.</div>
+   <h2>Essential cookies</h2><p>Needed for the site to function.</p>
+   <h2>Analytics</h2><p>Only privacy-respecting, aggregate measurement, and only with consent where required.</p>
+   <h2>Your control</h2><p>Manage or withdraw consent at any time via the cookie settings.</p>`);
+PAGES.responsible=()=>legal('Responsible AI','Responsible AI &amp; Clinical Safety',
+  'The principles behind how we build clinical AI.',
+  `<h2>Decision support, not autonomy</h2><p>Outputs are advisory; the qualified clinician decides.</p>
+   <h2>Explainability</h2><p>Every recommendation cites a source the clinician can open.</p>
+   <h2>Bounded by design</h2><p>The AI reasons only over the institution&rsquo;s approved knowledge, never the open web.</p>
+   <h2>Data sovereignty</h2><p>Protected patient data stays inside the client&rsquo;s environment.</p>
+   <h2>Built as a regulated device</h2><p>Designed against recognised standards, with a named Clinical Safety Officer and a clinical safety case.</p>
+   <h2>Honesty</h2><p>We publish limitations and negative results, and we don&rsquo;t overclaim.</p>
+   <div class="note-inline">This is a principles statement, not a claim of held conformity or certification.</div>`);
+
+/* ============================================================
+   ROUTER + interactions
+   ============================================================ */
+const app = document.getElementById('app');
+function titleFor(k){
+  const map={home:'TheraGraph AI — Protocol-Locked Clinical Intelligence',how:'How it works',closed:'The closed system',
+    modules:'Modules',integration:'Integration',security:'Security & governance','sol-hospitals':'For Hospitals & Pharmacy',
+    'sol-it':'For IT & Governance','sol-lifesci':'For Life Sciences',about:'About',why:'Why TheraGraph',evidence:'Evidence',
+    careers:'Careers',contact:'Contact',privacy:'Privacy Policy',terms:'Terms of Use',cookies:'Cookie Policy',responsible:'Responsible AI'};
+  return (k==='home'?'':(map[k]||'')+' — ')+'TheraGraph AI';
+}
+function render(){
+  let key=(location.hash||'#home').slice(1);
+  if(!PAGES[key])key='home';
+  app.innerHTML = header() + `<main>${PAGES[key]()}</main>` + footer();
+  document.title=titleFor(key);
+  window.scrollTo(0,0);
+  wire();
+  observeReveals();
+}
+function wire(){
+  // nav scrolled state
+  const nav=document.getElementById('nav');
+  const onScroll=()=>nav&&nav.classList.toggle('scrolled',window.scrollY>8);
+  window.removeEventListener('scroll',window.__tgScroll||(()=>{}));
+  window.__tgScroll=onScroll;window.addEventListener('scroll',onScroll);onScroll();
+  // burger
+  const b=document.getElementById('burger'),nl=document.getElementById('navlinks');
+  if(b)b.onclick=()=>nl.classList.toggle('open');
+  // links
+  app.querySelectorAll('[data-link]').forEach(el=>{
+    el.style.cursor='pointer';
+    el.addEventListener('click',e=>{e.preventDefault();location.hash='#'+el.getAttribute('data-link');});
+  });
+  // form
+  const f=document.getElementById('briefingForm');
+  if(f)f.addEventListener('submit',()=>{document.getElementById('formNote').style.display='block';f.reset();});
+}
+let io;
+function observeReveals(){
+  if(io)io.disconnect();
+  io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}}),{threshold:.12});
+  document.querySelectorAll('.reveal:not(.in)').forEach(el=>io.observe(el));
+}
+window.addEventListener('hashchange',render);
+render();
+</script>
+
+</body>
+</html>

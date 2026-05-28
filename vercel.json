@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "name": "theragraph-ai",
+  "builds": [
+    { "src": "index.html", "use": "@vercel/static" }
+  ]
+}
