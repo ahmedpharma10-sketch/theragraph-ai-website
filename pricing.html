@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TheraGraph AI — Pricing Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0B1F33; --navy2:#0E2A45; --teal:#0E7C86; --cyan:#13A3AE;
+  --slate:#33475B; --grey:#6B7A8D; --line:#C9D6DE; --pale:#EAF3F4; --off:#F2F6F8; --white:#FFFFFF;
+  --shadow:0 8px 30px rgba(11,31,51,.08),0 2px 8px rgba(11,31,51,.05);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',-apple-system,sans-serif;color:var(--slate);background:var(--off);line-height:1.5;font-size:14.5px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1280px;margin:0 auto;padding:24px}
+h1,h2,h3,h4{color:var(--navy);line-height:1.15;letter-spacing:-.015em;font-weight:700}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin-bottom:8px}
+
+/* header */
+header{background:var(--navy);color:#fff;padding:32px 0 36px;position:relative;overflow:hidden;margin-bottom:28px}
+header::before{content:"";position:absolute;width:560px;height:560px;right:-120px;top:-200px;border-radius:50%;background:radial-gradient(circle,rgba(19,163,174,.25),transparent 60%)}
+header .wrap{position:relative}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.brand svg{width:28px;height:28px;color:#fff}
+.brand .wm{font-weight:800;font-size:18px;letter-spacing:-.02em}
+.brand .a{color:#fff}.brand .b{color:var(--cyan)}.brand .c{font-size:.6em;color:#8FA6B8;vertical-align:super;font-weight:700}
+header h1{color:#fff;font-size:32px;font-weight:800;max-width:24ch;margin-bottom:10px}
+header .lede{color:#B9CAD8;max-width:64ch;font-size:15.5px}
+header .badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.2);border-radius:30px;padding:5px 12px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#AEC2D2;margin-bottom:14px}
+
+/* layout */
+.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:start}
+@media(max-width:980px){.grid{grid-template-columns:1fr}}
+
+/* card */
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:var(--shadow);margin-bottom:20px}
+.card h2{font-size:17px;margin-bottom:4px;display:flex;align-items:center;gap:9px}
+.card h2 .num{width:24px;height:24px;border-radius:50%;background:var(--pale);color:var(--teal);font-size:12px;display:grid;place-items:center;font-weight:800}
+.card .hint{font-size:12.5px;color:var(--grey);margin-bottom:14px}
+
+/* form controls */
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:6px}
+.field label .req{color:var(--teal);font-weight:700;margin-left:3px}
+select,input[type=number]{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:14px;color:var(--slate);background:#fff;transition:border .15s,box-shadow .15s}
+select:focus,input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(14,124,134,.13)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:560px){.row2,.row3{grid-template-columns:1fr}}
+
+/* segmented control */
+.seg{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff}
+.seg button{flex:1;min-width:0;padding:10px 8px;border:none;background:#fff;font:inherit;font-size:13px;color:var(--slate);cursor:pointer;transition:all .15s;border-right:1px solid var(--line);font-weight:500}
+.seg button:last-child{border-right:none}
+.seg button:hover{background:var(--off)}
+.seg button.on{background:var(--teal);color:#fff;font-weight:600}
+.seg.thin button{padding:8px 8px;font-size:12.5px}
+
+/* tier cards */
+.tiers{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:600px){.tiers{grid-template-columns:1fr}}
+.tier{border:1.5px solid var(--line);border-radius:10px;padding:12px;cursor:pointer;transition:all .15s;background:#fff}
+.tier:hover{border-color:var(--teal)}
+.tier.on{border-color:var(--teal);box-shadow:0 0 0 2px rgba(14,124,134,.18);background:#fff}
+.tier .nm{font-weight:700;color:var(--navy);font-size:13.5px;margin-bottom:3px}
+.tier .px{font-size:11.5px;color:var(--teal);font-weight:600;margin-bottom:6px}
+.tier .ds{font-size:11.5px;color:var(--grey);line-height:1.4}
+
+/* addons */
+.addon{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:8px;margin-bottom:7px;background:#fff;cursor:pointer;transition:all .15s}
+.addon:hover{border-color:var(--teal);background:#fafcfd}
+.addon.on{border-color:var(--teal);background:rgba(14,124,134,.04)}
+.addon .l{display:flex;flex-direction:column;gap:2px}
+.addon .l b{font-size:13px;color:var(--navy)}
+.addon .l span{font-size:11.5px;color:var(--grey)}
+.addon .r{display:flex;align-items:center;gap:10px}
+.addon .qty{width:62px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;font:inherit;font-size:12.5px;text-align:center}
+.addon .px{font-weight:700;color:var(--teal);font-size:13px;white-space:nowrap}
+.addon input[type=checkbox]{width:17px;height:17px;accent-color:var(--teal)}
+
+/* summary panel */
+.sumcard{position:sticky;top:18px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.sumhead{background:var(--navy);color:#fff;padding:18px 22px;position:relative;overflow:hidden}
+.sumhead::before{content:"";position:absolute;width:280px;height:280px;right:-80px;top:-80px;border-radius:50%;background:radial-gradient(circle,rgba(19,163,174,.28),transparent 60%)}
+.sumhead .eyebrow{color:var(--cyan);margin-bottom:6px;position:relative}
+.sumhead .total{font-size:34px;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1;position:relative;margin-bottom:4px}
+.sumhead .cur{font-size:18px;color:#AEC2D2;font-weight:600;margin-left:6px}
+.sumhead .y1lbl{font-size:11px;color:#8FA6B8;letter-spacing:.1em;text-transform:uppercase;position:relative}
+.sumhead .recurr{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.13);position:relative;display:flex;justify-content:space-between;align-items:baseline}
+.sumhead .recurr .lbl{font-size:11.5px;color:#AEC2D2;letter-spacing:.06em;text-transform:uppercase}
+.sumhead .recurr .val{font-size:18px;font-weight:700;color:#fff}
+
+.sumbody{padding:18px 22px}
+.line{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px dashed var(--line);font-size:13px}
+.line:last-of-type{border-bottom:none}
+.line .lbl{color:var(--slate)}
+.line .val{font-weight:600;color:var(--navy)}
+.line.muted .lbl,.line.muted .val{color:var(--grey);font-weight:400}
+.line.sub{padding:5px 0 5px 12px;font-size:12px}
+.line.sub .lbl{color:var(--grey)}
+.line.tot{padding:12px 0 6px;border-top:1.5px solid var(--navy);margin-top:6px;font-size:15px}
+.line.tot .lbl{font-weight:700;color:var(--navy)}
+.line.tot .val{font-weight:800;color:var(--teal);font-size:17px}
+
+.metric-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.metric{background:var(--off);border-radius:9px;padding:11px 13px}
+.metric .ml{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--grey);margin-bottom:3px}
+.metric .mv{font-size:18px;font-weight:800;color:var(--navy);letter-spacing:-.01em}
+.metric .ms{font-size:11px;color:var(--grey);margin-top:2px}
+
+.roi{margin-top:14px;background:var(--pale);border-left:4px solid var(--teal);border-radius:0 8px 8px 0;padding:12px 14px}
+.roi .t{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:4px}
+.roi .v{font-size:14px;color:var(--navy);font-weight:700;margin-bottom:3px}
+.roi .d{font-size:12px;color:var(--slate);line-height:1.45}
+
+.actions{display:flex;gap:9px;margin-top:14px;flex-wrap:wrap}
+.btn{flex:1;padding:11px 14px;border-radius:8px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s;min-width:120px}
+.btn.primary{background:var(--teal);border-color:var(--teal);color:#fff}
+.btn.primary:hover{background:var(--cyan);border-color:var(--cyan)}
+.btn.ghost{background:#fff;border-color:var(--line);color:var(--slate)}
+.btn.ghost:hover{border-color:var(--teal);color:var(--teal)}
+
+.flags{margin-top:12px;display:grid;gap:7px}
+.flag{font-size:12px;padding:8px 11px;border-radius:7px;display:flex;align-items:flex-start;gap:8px;line-height:1.42}
+.flag.warn{background:#FFF6E9;color:#9A6B12;border-left:3px solid #E0A33A}
+.flag.info{background:var(--pale);color:var(--navy);border-left:3px solid var(--teal)}
+.flag.ok{background:#E3F2E8;color:#2E7D4F;border-left:3px solid #2E7D4F}
+.flag svg{width:14px;height:14px;flex:none;margin-top:1px}
+
+footer{margin-top:30px;padding:18px 0;border-top:1px solid var(--line);font-size:11.5px;color:var(--grey)}
+footer .wrap{max-width:1280px}
+footer p{margin-bottom:5px}
+footer b{color:var(--navy)}
+
+/* output text */
+#breakdownTxt{width:100%;min-height:160px;font-family:'SF Mono',Consolas,monospace;font-size:12px;line-height:1.55;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--off);color:var(--slate);resize:vertical}
+.hideprint{display:block}
+@media print{
+  body{background:#fff}
+  header,.hideprint{display:none}
+  .card{break-inside:avoid;box-shadow:none}
+  .sumcard{position:static}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<g id="mk"><line x1="45" y1="20" x2="105" y2="45"/><line x1="105" y1="45" x2="80" y2="100"/><line x1="80" y1="100" x2="20" y2="80"/><line x1="20" y1="80" x2="45" y2="20"/><line x1="20" y1="80" x2="105" y2="45"/><circle cx="45" cy="20" r="10"/><circle cx="105" cy="45" r="10"/><circle cx="80" cy="100" r="10"/><circle cx="20" cy="80" r="10"/></g>
+</defs></svg>
+
+<header>
+  <div class="wrap">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <div class="brand">
+      <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit">
+      <svg viewBox="0 0 120 120"><use href="#mk" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="currentColor"/></svg>
+      <div class="wm"><span class="a">Thera</span><span class="b">Graph</span><span class="c">AI</span></div>
+      </a>
+    </div>
+    <a href="index.html" style="color:#AEC2D2;font-size:13px;font-weight:500;text-decoration:none;border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:7px 14px;transition:all .15s"
+       onmouseover="this.style.borderColor='rgba(255,255,255,.5)';this.style.color='#fff'"
+       onmouseout="this.style.borderColor='rgba(255,255,255,.2)';this.style.color='#AEC2D2'">&larr; Back to main site</a>
+    </div>
+    <div class="badge">Internal Pricing Calculator · v1.0</div>
+    <h1>Build a quote in 60 seconds.</h1>
+    <p class="lede">Pick the setting, size, tier, deployment and region. The calculator returns Year-1 cost, recurring annual cost, 3- and 5-year TCO, and the ROI anchor — all grounded in the published pricing framework.</p>
+  </div>
+</header>
+
+<div class="wrap">
+<div class="grid">
+
+<!-- ====== LEFT: INPUTS ====== -->
+<div>
+
+<div class="card">
+  <h2><span class="num">1</span>Setting</h2>
+  <div class="hint">Where will this be deployed? This sets the pricing metric — beds, sites, patients or residents.</div>
+  <div class="seg" id="seg-setting">
+    <button data-v="acute" class="on">Acute hospital</button>
+    <button data-v="outpatient">Outpatient clinics</button>
+    <button data-v="primary">Primary care / GP</button>
+    <button data-v="pharmacy">Community pharmacy</button>
+    <button data-v="carehome">Care home group</button>
+    <button data-v="pharma">Life sciences / pharma</button>
+  </div>
+</div>
+
+<div class="card">
+  <h2><span class="num">2</span>Size</h2>
+  <div class="hint" id="size-hint">How many acute beds at this site (or across the network)?</div>
+  <div class="field">
+    <label id="size-label">Number of acute beds <span class="req">*</span></label>
+    <input type="number" id="size" value="300" min="1" step="1">
+  </div>
+  <div class="field" id="extra-sites-field" style="display:none">
+    <label>Number of physical sites (for site-fee multi-site deployments)</label>
+    <input type="number" id="sites" value="1" min="1" step="1">
+  </div>
+</div>
+
+<div class="card">
+  <h2><span class="num">3</span>Module tier</h2>
+  <div class="hint">Bundles run on the same closed-system rails. Pharma tier is decoupled — see below.</div>
+  <div class="tiers" id="tiers">
+    <div class="tier" data-v="ddi">
+      <div class="nm">DDI engine only</div>
+      <div class="px">Standalone — usually bundled below MVD</div>
+      <div class="ds">Just the patient-contextual DDI flagship.</div>
+    </div>
+    <div class="tier on" data-v="essential">
+      <div class="nm">Essential</div>
+      <div class="px">$60–$120 / bed / year</div>
+      <div class="ds">DDI engine + renal/hepatic dosing + medication reconciliation.</div>
+    </div>
+    <div class="tier" data-v="advanced">
+      <div class="nm">Advanced</div>
+      <div class="px">$180–$320 / bed / year</div>
+      <div class="ds">Essential + polypharmacy + AMS + ADR prediction + dose-error reduction.</div>
+    </div>
+    <div class="tier" data-v="enterprise">
+      <div class="nm">Enterprise</div>
+      <div class="px">$350–$600 / bed / year</div>
+      <div class="ds">Advanced + high-alert safeguards + custom protocols + federated learning + premium SLA.</div>
+    </div>
+  </div>
+  <div class="tiers" id="tiers-pharma" style="display:none;margin-top:10px">
+    <div class="tier on" data-v="pv">
+      <div class="nm">Pharmacovigilance</div>
+      <div class="px">$150k–$400k / year</div>
+      <div class="ds">PV automation, signal detection, case triage on your safety data.</div>
+    </div>
+    <div class="tier" data-v="rwe">
+      <div class="nm">Within-org RWE</div>
+      <div class="px">$75k–$300k / year</div>
+      <div class="ds">RWE analysis on the client's own data + per-engagement work.</div>
+    </div>
+    <div class="tier" data-v="trial">
+      <div class="nm">Trial matching</div>
+      <div class="px">$25k–$75k / trial / year</div>
+      <div class="ds">On-prem patient matching to active trial eligibility.</div>
+    </div>
+    <div class="tier" data-v="medaffairs">
+      <div class="nm">Medical-affairs AI</div>
+      <div class="px">$1.5k–$3k / user / year</div>
+      <div class="ds">Closed-corpus Q&amp;A over your medical library.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h2><span class="num">4</span>Deployment</h2>
+  <div class="hint">Closed-system on-prem commands a 30–60% premium and a one-time deployment fee.</div>
+  <div class="seg" id="seg-deploy">
+    <button data-v="cloud">Private regional cloud</button>
+    <button data-v="hybrid" class="on">Hybrid</button>
+    <button data-v="onprem">On-prem / air-gapped</button>
+  </div>
+</div>
+
+<div class="card">
+  <h2><span class="num">5</span>Region &amp; commercial terms</h2>
+  <div class="row3">
+    <div class="field">
+      <label>Region</label>
+      <select id="region">
+        <option value="us">United States</option>
+        <option value="uk" selected>UK / NHS</option>
+        <option value="eu">Western Europe</option>
+        <option value="gcc">GCC (UAE / KSA / Qatar)</option>
+        <option value="other">Other / lower-income</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Term length</label>
+      <select id="term">
+        <option value="1">1 year</option>
+        <option value="3" selected>3 years</option>
+        <option value="5">5 years</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Customer phase</label>
+      <select id="phase">
+        <option value="charter">Charter (first 3)</option>
+        <option value="reference" selected>Reference (next 5–8)</option>
+        <option value="list">List (open market)</option>
+      </select>
+    </div>
+  </div>
+  <div class="field">
+    <label>Per-bed / per-unit price band</label>
+    <div class="seg thin" id="seg-band">
+      <button data-v="low">Low (entry)</button>
+      <button data-v="mid" class="on">Mid (default)</button>
+      <button data-v="high">High (premium)</button>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h2><span class="num">6</span>Add-on services <span style="font-weight:400;font-size:13px;color:var(--grey);margin-left:6px">(optional)</span></h2>
+  <div class="hint">Atelier consulting, advisory, validation packages and infrastructure extras. Toggle and set quantities.</div>
+  <div id="addons"></div>
+</div>
+
+</div>
+
+<!-- ====== RIGHT: SUMMARY ====== -->
+<div>
+<div class="sumcard">
+  <div class="sumhead">
+    <div class="eyebrow">Year 1 total</div>
+    <div><span id="y1total" class="total">$0</span><span id="y1cur" class="cur">USD</span></div>
+    <div class="y1lbl">includes one-time fees + first-year subscription + services</div>
+    <div class="recurr">
+      <span class="lbl">Year 2+ recurring</span>
+      <span id="recurr" class="val">$0</span>
+    </div>
+  </div>
+  <div class="sumbody">
+    <div id="lines"></div>
+
+    <div class="metric-row">
+      <div class="metric">
+        <div class="ml">3-year TCO</div>
+        <div id="tco3" class="mv">$0</div>
+        <div class="ms">Year 1 + 2 recurring years</div>
+      </div>
+      <div class="metric">
+        <div class="ml">5-year TCO</div>
+        <div id="tco5" class="mv">$0</div>
+        <div class="ms">Year 1 + 4 recurring years</div>
+      </div>
+    </div>
+
+    <div class="metric-row">
+      <div class="metric">
+        <div class="ml">Effective rate</div>
+        <div id="effrate" class="mv">—</div>
+        <div id="effratesub" class="ms">recurring / unit / year</div>
+      </div>
+      <div class="metric">
+        <div class="ml">Implied ARR (Yr2+)</div>
+        <div id="arrShow" class="mv">$0</div>
+        <div class="ms">net of phase discount</div>
+      </div>
+    </div>
+
+    <div class="roi" id="roiBox">
+      <div class="t">ROI anchor</div>
+      <div class="v" id="roiV">—</div>
+      <div class="d" id="roiD">Value at risk uses Pirmohamed-derived ≈£5,000 per acute bed per year of ADR-related cost as the international benchmark.</div>
+    </div>
+
+    <div class="flags" id="flags"></div>
+
+    <div class="actions hideprint">
+      <button class="btn primary" onclick="window.print()">Print / save PDF</button>
+      <button class="btn ghost" onclick="copyBreakdown()">Copy breakdown</button>
+    </div>
+
+    <textarea id="breakdownTxt" readonly style="margin-top:12px" placeholder="Detailed proposal text will appear here."></textarea>
+  </div>
+</div>
+</div>
+
+</div><!-- /grid -->
+</div><!-- /wrap -->
+
+<footer>
+<div class="wrap">
+<p><b>Pricing framework basis.</b> Per-bed/year ranges from the published international pricing research (Sunrise Pharmacy comp: $100–$300/bed/year per ZipDo 2026; Aidoc / Bayesian Health ROI proxies; UpToDate; NHS framework signals). ROI anchor uses Pirmohamed/Davies ~£5,000 per acute bed per year of ADR-related cost — directly cited by the UK NHS and broadly transferable internationally. All prices are guideline ranges, not commitments; realised pricing depends on procurement, scope, region and reference value.</p>
+<p><b>Phase discounts:</b> Charter −50% (first 3 reference customers) · Reference −30% · List 0%. <b>Multi-year discounts:</b> 1y 0% · 3y −12% · 5y −20%. <b>On-prem multipliers:</b> Cloud ×1.00 · Hybrid ×1.20 · On-prem ×1.45. <b>Regional multipliers (vs US):</b> US 1.00 · UK 0.72 · EU 0.90 · GCC 1.00 · Other 0.40. Currencies shown reflect the buyer's typical procurement currency for that region.</p>
+</div>
+</footer>
+
+<script>
+/* ============================================================
+   PRICING ENGINE
+   ============================================================ */
+const STATE = {
+  setting:'acute', size:300, sites:1,
+  tier:'essential', tierPharma:'pv',
+  deploy:'hybrid', region:'uk', term:3, phase:'reference', band:'mid',
+  addons:{}
+};
+
+/* per-unit price bands (low / mid / high) — USD list, per acute bed/year unless noted */
+const PRICE = {
+  acute:{
+    ddi:        {low:40,  mid:80,  high:120, label:'per bed/year'},
+    essential:  {low:60,  mid:90,  high:120, label:'per bed/year'},
+    advanced:   {low:180, mid:250, high:320, label:'per bed/year'},
+    enterprise: {low:350, mid:475, high:600, label:'per bed/year'},
+  },
+  outpatient:{
+    ddi:        {low:3500, mid:6500,  high:10000, label:'per site/year'},
+    essential:  {low:5000, mid:8500,  high:14000, label:'per site/year'},
+    advanced:   {low:9000, mid:14000, high:20000, label:'per site/year'},
+    enterprise: {low:15000,mid:22000, high:30000, label:'per site/year'},
+  },
+  primary:{
+    ddi:        {low:0.5, mid:1.0, high:2.0, label:'per registered patient/year'},
+    essential:  {low:0.8, mid:1.4, high:2.4, label:'per registered patient/year'},
+    advanced:   {low:1.5, mid:2.5, high:4.0, label:'per registered patient/year'},
+    enterprise: {low:2.5, mid:4.0, high:6.0, label:'per registered patient/year'},
+  },
+  pharmacy:{
+    ddi:        {low:2400, mid:4800,  high:7200, label:'per pharmacy site/year ($200–$600/mo)'},
+    essential:  {low:3600, mid:6000,  high:9000, label:'per pharmacy site/year'},
+    advanced:   {low:6000, mid:9000,  high:13000,label:'per pharmacy site/year'},
+    enterprise: {low:9000, mid:13000, high:18000,label:'per pharmacy site/year'},
+  },
+  carehome:{
+    ddi:        {low:36, mid:60, high:96, label:'per resident/year ($3–$8/month)'},
+    essential:  {low:48, mid:72, high:108,label:'per resident/year'},
+    advanced:   {low:72, mid:108,high:156,label:'per resident/year'},
+    enterprise: {low:120,mid:180,high:240,label:'per resident/year'},
+  },
+};
+
+/* pharma tiers — annual platform/licence regardless of "size" input */
+const PHARMA = {
+  pv:        {low:150000, mid:275000, high:400000, label:'Pharmacovigilance — annual platform'},
+  rwe:       {low:75000,  mid:180000, high:300000, label:'Within-org RWE — annual platform'},
+  trial:     {low:25000,  mid:50000,  high:75000,  label:'Trial matching — annual per active trial'},
+  medaffairs:{low:1500,   mid:2250,   high:3000,   label:'Medical-affairs AI — per user/year'},
+};
+
+const DEPLOY = {
+  cloud:  {mult:1.00, deployFee:[15000,35000], label:'Private regional cloud'},
+  hybrid: {mult:1.20, deployFee:[40000,90000], label:'Hybrid'},
+  onprem: {mult:1.45, deployFee:[75000,250000],label:'On-premise / air-gapped'},
+};
+
+const REGION = {
+  us:   {mult:1.00, cur:'USD', sym:'$'},
+  uk:   {mult:0.72, cur:'GBP', sym:'£'},
+  eu:   {mult:0.90, cur:'EUR', sym:'€'},
+  gcc:  {mult:1.00, cur:'USD', sym:'$'},   /* invoice in USD or AED at 3.6725 peg */
+  other:{mult:0.40, cur:'USD', sym:'$'},
+};
+
+const PHASE = {charter:0.50, reference:0.70, list:1.00};
+const TERM  = {1:1.00, 3:0.88, 5:0.80};
+
+/* annual on-prem platform fee (separate from deployment fee) */
+const APPLIANCE = {cloud:0, hybrid:[20000,40000], onprem:[30000,80000]};
+
+/* add-on catalogue: id, label, hint, unit, unit price band [low, mid, high] (USD) */
+const ADDONS = [
+  {id:'atelier_dev',  label:'Atelier custom development', hint:'Senior consultant-day, blended', unit:'days', band:[1500,2250,3000]},
+  {id:'safety_case',  label:'Clinical safety case package', hint:'Fixed-deliverable', unit:'packages', band:[40000,75000,120000]},
+  {id:'validation',   label:'AI validation & bias audit', hint:'Independent validation engagement', unit:'engagements', band:[35000,65000,100000]},
+  {id:'regulatory',   label:'Regulatory / conformity support', hint:'Per-jurisdiction package', unit:'packages', band:[30000,55000,90000]},
+  {id:'training',     label:'Training & change management', hint:'On-site programme', unit:'programmes', band:[15000,28000,45000]},
+  {id:'integration',  label:'EPR integration package', hint:'Per EPR vendor', unit:'EPRs', band:[20000,45000,80000]},
+  {id:'federated',    label:'Federated learning enablement', hint:'One-off setup, multi-site', unit:'deployments', band:[60000,110000,180000]},
+  {id:'advisory_ret', label:'Advisory retainer (monthly)', hint:'AI strategy retainer', unit:'months', band:[30000,50000,75000]},
+];
+
+function fmt(n,sym='$'){
+  if(!isFinite(n))return sym+'0';
+  return sym + Math.round(n).toLocaleString('en-US');
+}
+function fmtCompact(n,sym='$'){
+  if(n>=1e6)return sym+(n/1e6).toFixed(n>=10e6?1:2).replace(/\.0+$/,'')+'M';
+  if(n>=1e3)return sym+Math.round(n/1e3)+'k';
+  return sym+Math.round(n);
+}
+
+/* core calculation */
+function calc(){
+  const s=STATE;
+  const R=REGION[s.region], D=DEPLOY[s.deploy];
+  const phaseD=PHASE[s.phase], termD=TERM[s.term];
+  const sym=R.sym, cur=R.cur, mult=R.mult;
+
+  let subscription=0;
+  let deployFee=0;
+  let appliance=0;
+  let perUnitLabel='';
+  let perUnitListUSD=0;
+  let unitsForRate=0;
+
+  if(s.setting==='pharma'){
+    const tier=PHARMA[s.tierPharma];
+    perUnitListUSD=tier[s.band];
+    perUnitLabel=tier.label;
+    if(s.tierPharma==='medaffairs'){
+      // size = users
+      subscription = perUnitListUSD * s.size;
+      unitsForRate = s.size;
+    } else if(s.tierPharma==='trial'){
+      // size = active trials
+      subscription = perUnitListUSD * s.size;
+      unitsForRate = s.size;
+    } else {
+      // platform fee, size irrelevant
+      subscription = perUnitListUSD;
+      unitsForRate = 1;
+    }
+  } else {
+    const tier=PRICE[s.setting][s.tier];
+    perUnitListUSD=tier[s.band];
+    perUnitLabel=tier.label;
+    let units;
+    if(s.setting==='acute' || s.setting==='primary' || s.setting==='carehome'){
+      units = s.size;
+    } else {
+      // outpatient & pharmacy use site count; we treat the input as 'sites' when setting is outpatient/pharmacy
+      units = s.size;
+    }
+    subscription = perUnitListUSD * units;
+    unitsForRate = units;
+  }
+
+  // multi-site uplift for outpatient/pharmacy: extra small uplift per additional site (already counted via size)
+  // deployment fee (mid of band)
+  const depFeeBand = D.deployFee;
+  const appBand = APPLIANCE[s.deploy];
+  if(depFeeBand) deployFee = (depFeeBand[0]+depFeeBand[1])/2;
+  if(Array.isArray(appBand)) appliance = (appBand[0]+appBand[1])/2;
+
+  // apply deploy mult to subscription only
+  subscription = subscription * D.mult;
+
+  // regional + phase discount apply to subscription and appliance; deployment fee gets regional only (logistics still cost)
+  function priceLine(usd){return usd * mult * phaseD * termD;}
+  function priceLineNoPhase(usd){return usd * mult;} // deployment fees: regional adjust only, no phase discount (they're cost-driven)
+
+  const subAfter = subscription * mult * phaseD * termD;
+  const applAfter = appliance * mult * phaseD * termD;
+  const depAfter = deployFee * mult;
+
+  // add-ons
+  let addonsTotal=0;
+  const addonLines=[];
+  for(const a of ADDONS){
+    const st=s.addons[a.id];
+    if(st && st.on && st.qty>0){
+      const unitUsd=a.band[1]; // mid
+      const lineUsd = unitUsd * st.qty;
+      const lineLocal = priceLineNoPhase(lineUsd); // services: regional adjust, no phase/term discount
+      addonsTotal += lineLocal;
+      addonLines.push({label:a.label, qty:st.qty, unit:a.unit, lineLocal});
+    }
+  }
+
+  const y1 = depAfter + subAfter + applAfter + addonsTotal;
+  const recurr = subAfter + applAfter;
+  const tco3 = y1 + recurr*2;
+  const tco5 = y1 + recurr*4;
+
+  // effective per-unit recurring rate (in local currency)
+  const effRate = (unitsForRate>0) ? (recurr / unitsForRate) : 0;
+
+  // ROI anchor — value at risk
+  let varLocal=0, roiLabel='', roiDetail='';
+  if(s.setting==='acute'){
+    // £5,000 per acute bed / year; convert per region using regional mult vs UK reference for GBP, vs USD for others
+    const valueGBP_per_bed = 5000;
+    let valuePerBedLocal;
+    if(s.region==='uk'){ valuePerBedLocal = valueGBP_per_bed; }
+    else if(s.region==='eu'){ valuePerBedLocal = valueGBP_per_bed * 1.17; } // approx GBP→EUR
+    else if(s.region==='us'){ valuePerBedLocal = valueGBP_per_bed * 1.27; } // approx GBP→USD
+    else if(s.region==='gcc'){ valuePerBedLocal = valueGBP_per_bed * 1.27; }
+    else { valuePerBedLocal = valueGBP_per_bed * 1.27; }
+    varLocal = valuePerBedLocal * s.size;
+    const ratio = recurr / varLocal;
+    roiLabel = `Price is ~${(ratio*100).toFixed(1)}% of harm-avoidance value`;
+    roiDetail = `Value at risk: ${fmt(varLocal,sym)} per year (${s.size} beds × Pirmohamed-derived ≈£5,000/bed/year). At ${fmt(recurr,sym)} recurring, a 10–25% reduction implies a 2–6× ROI.`;
+  } else if(s.setting==='carehome'){
+    // care-home polypharmacy: indicative value at risk ≈ £350/resident/year preventable cost (conservative)
+    const v = 350 * (s.region==='uk'?1: s.region==='eu'?1.17:1.27);
+    varLocal = v * s.size;
+    const ratio = recurr / varLocal;
+    roiLabel = `Price is ~${(ratio*100).toFixed(1)}% of conservative preventable-cost benchmark`;
+    roiDetail = `Indicative value at risk: ${fmt(varLocal,sym)}/year (≈£350/resident/year preventable medication cost). Use as conservative anchor only.`;
+  } else if(s.setting==='primary' || s.setting==='outpatient' || s.setting==='pharmacy'){
+    roiLabel = 'Outpatient ROI anchor requires customer-specific data';
+    roiDetail = 'Ambulatory ADR cost varies widely. Recommended: extract baseline medication-related events from the buyer\'s data during pilot, then anchor renewal pricing to actual reduction.';
+  } else {
+    roiLabel = 'Life-sciences value driven by trial/PV throughput';
+    roiDetail = 'Anchor to time saved per PV case (4–8h × loaded FTE rate) and per active trial recruitment uplift. Customer-specific.';
+  }
+
+  return {
+    sym, cur, mult,
+    subscription, deployFee, appliance, addonsTotal,
+    subAfter, depAfter, applAfter,
+    y1, recurr, tco3, tco5,
+    perUnitListUSD, perUnitLabel, effRate, unitsForRate,
+    addonLines,
+    varLocal, roiLabel, roiDetail,
+  };
+}
+
+function effectiveRecurringPerUnit(c){return c.unitsForRate>0 ? c.recurr/c.unitsForRate : 0;}
+
+/* ============================================================
+   RENDERING
+   ============================================================ */
+function renderAddons(){
+  const root=document.getElementById('addons'); root.innerHTML='';
+  for(const a of ADDONS){
+    const st=STATE.addons[a.id]||{on:false,qty:1};
+    const div=document.createElement('div');
+    div.className='addon'+(st.on?' on':'');
+    div.innerHTML=`
+      <div class="l"><b>${a.label}</b><span>${a.hint} · $${a.band[1].toLocaleString()} ${a.unit==='days'?'/day':a.unit==='months'?'/month':'each'}</span></div>
+      <div class="r">
+        <input type="number" class="qty" min="1" value="${st.qty||1}">
+        <input type="checkbox" ${st.on?'checked':''}>
+      </div>`;
+    const qty=div.querySelector('.qty'); const chk=div.querySelector('input[type=checkbox]');
+    qty.onclick=e=>e.stopPropagation();
+    qty.oninput=()=>{ STATE.addons[a.id]={on:chk.checked, qty:Math.max(1,parseInt(qty.value)||1)}; update(); };
+    chk.onclick=e=>{e.stopPropagation(); STATE.addons[a.id]={on:chk.checked, qty:Math.max(1,parseInt(qty.value)||1)}; update();};
+    div.onclick=()=>{chk.checked=!chk.checked; STATE.addons[a.id]={on:chk.checked, qty:Math.max(1,parseInt(qty.value)||1)}; update();};
+    root.appendChild(div);
+  }
+}
+
+function setSize(){
+  const lbl=document.getElementById('size-label');
+  const hint=document.getElementById('size-hint');
+  const sites=document.getElementById('extra-sites-field');
+  sites.style.display='none';
+  const sizeIn=document.getElementById('size');
+
+  const labels={
+    acute:{l:'Number of acute beds', h:'How many acute beds at this site (or across the network)?', def:300},
+    outpatient:{l:'Number of clinic sites', h:'How many outpatient clinic sites?', def:5},
+    primary:{l:'Number of registered patients', h:'Total registered patient population across the practice / PCN.', def:30000},
+    pharmacy:{l:'Number of pharmacy sites', h:'How many community pharmacy sites?', def:20},
+    carehome:{l:'Number of residents', h:'Total residents across the care-home group.', def:500},
+    pharma:{
+      pv:{l:'Not used — flat platform fee', h:'Pharmacovigilance is a flat annual platform licence.', def:1},
+      rwe:{l:'Not used — flat platform fee', h:'Within-org RWE is a flat annual platform licence.', def:1},
+      trial:{l:'Number of active trials', h:'How many active trials will use the matching engine?', def:3},
+      medaffairs:{l:'Number of named users', h:'How many medical-affairs users need access?', def:20},
+    }
+  };
+  let def;
+  if(STATE.setting==='pharma'){
+    const p=labels.pharma[STATE.tierPharma];
+    lbl.textContent=p.l; hint.textContent=p.h; def=p.def;
+  } else {
+    const p=labels[STATE.setting];
+    lbl.textContent=p.l; hint.textContent=p.h; def=p.def;
+  }
+  // only override if size still looks like a default switch
+  // (don't trample user input)
+}
+
+function syncSeg(id, val){
+  document.querySelectorAll('#'+id+' button').forEach(b=>{
+    b.classList.toggle('on', b.dataset.v===val);
+  });
+}
+function syncTiers(){
+  const pharma = STATE.setting==='pharma';
+  document.getElementById('tiers').style.display = pharma?'none':'grid';
+  document.getElementById('tiers-pharma').style.display = pharma?'grid':'none';
+  document.querySelectorAll('#tiers .tier').forEach(t=>t.classList.toggle('on', t.dataset.v===STATE.tier));
+  document.querySelectorAll('#tiers-pharma .tier').forEach(t=>t.classList.toggle('on', t.dataset.v===STATE.tierPharma));
+}
+
+function flags(c){
+  const out=[];
+  // minimum viable deal size
+  const mvdUSD=150000;
+  const y1USD = c.y1 / c.mult; // back to USD-equivalent
+  const recurrUSD = c.recurr / c.mult;
+  if(STATE.setting==='pharma'){
+    // skip MVD for pharma — different sales motion
+  } else if(recurrUSD < mvdUSD && STATE.phase!=='charter'){
+    out.push({type:'warn',
+      msg:`Recurring ACV is below the recommended $150k minimum viable deal size (current ≈ ${fmtCompact(recurrUSD)}). Consider upgrading the tier, bundling more modules, or moving the buyer to Charter terms.`});
+  }
+  if(STATE.phase==='charter'){
+    out.push({type:'info',
+      msg:'Charter pricing applied (−50%). Reserve for the first 3 reference customers; require case-study + reference rights in the MSA, and contract a true-up to standard pricing at renewal.'});
+  }
+  if(STATE.setting==='acute' && STATE.tier==='ddi'){
+    out.push({type:'info',
+      msg:'Standalone DDI rarely clears the minimum deal size. Recommend bundling into the Essential tier or quoting on-prem with the deployment premium.'});
+  }
+  if(STATE.deploy==='onprem' && STATE.setting!=='acute' && STATE.setting!=='pharma'){
+    out.push({type:'info',
+      msg:'On-prem is unusual outside acute hospitals and pharma. Confirm the buyer has GPU / inference infrastructure before quoting this configuration.'});
+  }
+  if(STATE.region==='gcc'){
+    out.push({type:'info',
+      msg:'GCC: quote in AED (×3.6725 vs USD) for UAE buyers or SAR for KSA. Apply 5% VAT (UAE) or 15% VAT (KSA) on top. Sovereign-cloud deployment is often a procurement requirement.'});
+  }
+  if(STATE.region==='uk'){
+    out.push({type:'info',
+      msg:'UK / NHS: route through NHS SBS Healthcare AI Solutions framework or NHS LPP CDHS v2. Expect 9–18 month procurement; pre-fill DSPT, DCB0129/30 and DPIA evidence.'});
+  }
+  return out;
+}
+
+function render(){
+  const c=calc();
+  const s=c.sym, cur=c.cur;
+  document.getElementById('y1total').textContent = fmt(c.y1, s);
+  document.getElementById('y1cur').textContent = cur;
+  document.getElementById('recurr').textContent = fmt(c.recurr, s);
+  document.getElementById('tco3').textContent = fmtCompact(c.tco3, s);
+  document.getElementById('tco5').textContent = fmtCompact(c.tco5, s);
+  document.getElementById('arrShow').textContent = fmt(c.recurr, s);
+
+  // effective rate
+  const er = effectiveRecurringPerUnit(c);
+  document.getElementById('effrate').textContent = er>0?fmt(er,s):'—';
+  document.getElementById('effratesub').textContent = c.perUnitLabel ? c.perUnitLabel : '';
+
+  // lines
+  const L=document.getElementById('lines'); L.innerHTML='';
+  function add(lbl,val,cls=''){ L.insertAdjacentHTML('beforeend', `<div class="line ${cls}"><span class="lbl">${lbl}</span><span class="val">${val}</span></div>`); }
+  add(`Subscription (${PRICE[STATE.setting]?(PRICE[STATE.setting][STATE.tier]?.label||''):(PHARMA[STATE.tierPharma].label)})`, fmt(c.subAfter,s));
+  add(`<span style="color:var(--grey);font-size:11.5px">at ${s}${Math.round(c.perUnitListUSD*c.mult).toLocaleString()} list, deploy ×${DEPLOY[STATE.deploy].mult.toFixed(2)}, phase ×${PHASE[STATE.phase].toFixed(2)}, term ×${TERM[STATE.term].toFixed(2)}</span>`,'','muted sub');
+
+  if(STATE.setting!=='pharma' || STATE.tierPharma!=='medaffairs'){
+    add(`Deployment fee (one-time)`, fmt(c.depAfter,s));
+  }
+  if(c.applAfter>0){
+    add(`Inference appliance / platform (annual)`, fmt(c.applAfter,s));
+  }
+  if(c.addonLines.length){
+    add('— Add-on services —','','muted');
+    for(const a of c.addonLines){
+      add(`${a.label} (${a.qty} ${a.unit})`, fmt(a.lineLocal,s));
+    }
+  }
+  add('Year 1 total', fmt(c.y1,s),'tot');
+
+  // ROI
+  document.getElementById('roiV').textContent = c.roiLabel;
+  document.getElementById('roiD').textContent = c.roiDetail;
+
+  // flags
+  const F=document.getElementById('flags'); F.innerHTML='';
+  const fIco={warn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>',
+    info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v.01M12 11v5"/></svg>',
+    ok:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>'};
+  for(const f of flags(c)){
+    F.insertAdjacentHTML('beforeend', `<div class="flag ${f.type}">${fIco[f.type]}<span>${f.msg}</span></div>`);
+  }
+
+  // breakdown text
+  const tier = STATE.setting==='pharma' ? PHARMA[STATE.tierPharma].label : (STATE.tier+' tier');
+  const sizeLine = (function(){
+    if(STATE.setting==='pharma'){
+      if(STATE.tierPharma==='medaffairs') return STATE.size+' named users';
+      if(STATE.tierPharma==='trial') return STATE.size+' active trials';
+      return 'Flat annual platform licence';
+    }
+    const unit = {acute:'beds',outpatient:'clinic sites',primary:'registered patients',pharmacy:'pharmacy sites',carehome:'residents'}[STATE.setting];
+    return STATE.size.toLocaleString()+' '+unit;
+  })();
+  const txt = `TheraGraph AI — Indicative Quote\n`+
+    `--------------------------------\n`+
+    `Setting: ${({acute:'Acute hospital',outpatient:'Outpatient clinics',primary:'Primary care / GP',pharmacy:'Community pharmacy',carehome:'Care home group',pharma:'Life sciences / pharma'})[STATE.setting]}\n`+
+    `Scale: ${sizeLine}\n`+
+    `Module: ${tier}\n`+
+    `Deployment: ${DEPLOY[STATE.deploy].label}\n`+
+    `Region: ${({us:'United States',uk:'UK / NHS',eu:'Western Europe',gcc:'GCC',other:'Other / lower-income'})[STATE.region]} (currency: ${cur})\n`+
+    `Term: ${STATE.term} year${STATE.term>1?'s':''}\n`+
+    `Phase: ${({charter:'Charter (first 3 reference)',reference:'Reference (next 5–8)',list:'List (open market)'})[STATE.phase]}\n`+
+    `Price band: ${({low:'Low (entry)',mid:'Mid (default)',high:'High (premium)'})[STATE.band]}\n\n`+
+    `Subscription (yr 1):        ${fmt(c.subAfter,s)} ${cur}\n`+
+    `Deployment fee (one-time):  ${fmt(c.depAfter,s)} ${cur}\n`+
+    (c.applAfter>0?`Platform / appliance (yr):  ${fmt(c.applAfter,s)} ${cur}\n`:'')+
+    (c.addonLines.length?`Add-on services:\n`+c.addonLines.map(a=>`  - ${a.label} (${a.qty} ${a.unit}): ${fmt(a.lineLocal,s)} ${cur}`).join('\n')+'\n':'')+
+    `\nYEAR 1 TOTAL:               ${fmt(c.y1,s)} ${cur}\n`+
+    `Year 2+ recurring:          ${fmt(c.recurr,s)} ${cur} / year\n`+
+    `3-year TCO:                 ${fmt(c.tco3,s)} ${cur}\n`+
+    `5-year TCO:                 ${fmt(c.tco5,s)} ${cur}\n\n`+
+    `Effective recurring rate:   ${er>0?fmt(er,s)+' '+cur+' '+c.perUnitLabel:'—'}\n`+
+    `ROI anchor:                 ${c.roiLabel}\n`+
+    `                            ${c.roiDetail}\n\n`+
+    `--\nQuote generated by the TheraGraph AI internal calculator. Ranges are guidelines; final pricing is subject to scope, procurement and reference value.`;
+  document.getElementById('breakdownTxt').value = txt;
+}
+
+function update(){
+  // re-render dependent UI
+  setSize();
+  syncSeg('seg-setting', STATE.setting);
+  syncSeg('seg-deploy', STATE.deploy);
+  syncSeg('seg-band', STATE.band);
+  syncTiers();
+  document.getElementById('region').value=STATE.region;
+  document.getElementById('term').value=STATE.term;
+  document.getElementById('phase').value=STATE.phase;
+  render();
+}
+
+function copyBreakdown(){
+  const t=document.getElementById('breakdownTxt'); t.select(); document.execCommand('copy');
+  const btn=event.target.closest('.btn');
+  const old=btn.textContent; btn.textContent='Copied ✓';
+  setTimeout(()=>btn.textContent=old,1400);
+}
+
+/* event wiring */
+document.querySelectorAll('#seg-setting button').forEach(b=>b.onclick=()=>{
+  STATE.setting=b.dataset.v;
+  // smart size defaults so the user sees a sensible starting number
+  const sizeIn=document.getElementById('size');
+  const def={acute:300,outpatient:5,primary:30000,pharmacy:20,carehome:500,pharma: (STATE.tierPharma==='trial'?3: STATE.tierPharma==='medaffairs'?20:1)}[b.dataset.v];
+  sizeIn.value=def; STATE.size=def;
+  update();
+});
+document.querySelectorAll('#tiers .tier').forEach(t=>t.onclick=()=>{STATE.tier=t.dataset.v; update();});
+document.querySelectorAll('#tiers-pharma .tier').forEach(t=>t.onclick=()=>{STATE.tierPharma=t.dataset.v;
+  // adjust size for pharma sub-tier
+  const sizeIn=document.getElementById('size');
+  const def = t.dataset.v==='medaffairs'?20: t.dataset.v==='trial'?3:1;
+  sizeIn.value=def; STATE.size=def;
+  update();
+});
+document.querySelectorAll('#seg-deploy button').forEach(b=>b.onclick=()=>{STATE.deploy=b.dataset.v; update();});
+document.querySelectorAll('#seg-band button').forEach(b=>b.onclick=()=>{STATE.band=b.dataset.v; update();});
+document.getElementById('size').oninput=e=>{STATE.size=Math.max(1, parseInt(e.target.value)||1); render();};
+document.getElementById('region').onchange=e=>{STATE.region=e.target.value; render();};
+document.getElementById('term').onchange=e=>{STATE.term=parseInt(e.target.value); render();};
+document.getElementById('phase').onchange=e=>{STATE.phase=e.target.value; render();};
+
+renderAddons();
+update();
+</script>
+</body>
+</html>
